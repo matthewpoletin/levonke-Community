@@ -1,0 +1,16 @@
+language: java
+jdk:
+- oraclejdk8
+install:
+- gradle assemble
+script:
+- gradle check
+deploy:
+  provider: heroku
+  api_key:
+    secure: uTD3Xhu1AMHMirKnNS2t0dHDmWXERfn4FZc5vePPj4+WtR4cMdTXBTG8tB0tJg6EPdBQl9mOLByIVxiaqC6dB0c2b3LcTyDiPgMGSNG9YqYYNjTgOPyafl682cuQlbMRLmPLPP22CbbS4J3nBqorADrp5yoObwkRm9mEN7KucB3xMbDPcPC4UD7FUbLpHbuzt9zOkA4LDmaINrw0FNR1fN0gOuq7f1lh6g2JaMs135VGfVeofWucRtKJVhl/txvds1Jop4D8yqwbpxpvTPwpYbEzIwIR8Ug8IUJfl/1b4wR7GhYx/Mkgte/WmG+q1NqtHAW25BvnjWuWaj1NJqJkRPEXv9UcnKHMJKg0BAvPVW6tN5iSlI4D000m3eCESLLJBgWl/2LuexvfqNFmIVyiVC1etT9A6TwwWzOjqPJX4MVIeWYUwl7oVHlTPV+rPvY8A6tAF46NifwzHgEDTO0gF+ElRdFUCNVHRUDMtsQqcPSDso4HPocDMRku7Or+EFL6FiyvqgoFJf7HgTNpJeMgqM+udhlgijh5MGMM+6ayLN1udcdttlrlLA7AFJGaOB2qSQmsMoy27IbORfX0oQqX+QAXecC77SKEbAy+QOd0ibO0/Rvqo11OCHnO6/44DrgXu5Ml8GHVVEtnShaxPX78LDvl9D/Eofqi0ILDgoZEiAo=
+  app: levonke
+  on:
+    repo: matthewpoletin/levonke
+notifications:
+  email: false

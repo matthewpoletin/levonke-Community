@@ -10,6 +10,8 @@ class IndexControllerTest {
 	@Test
 	void reverseTest() {
 		assertEquals(indexController.reverse("abc"), "cba");
+		assertEquals(indexController.reverse("Hello, world!"), "!dlrow ,olleH");
+		assertEquals(indexController.reverse("你好，世界！"), "！界世，好你");
 	}
 
 }

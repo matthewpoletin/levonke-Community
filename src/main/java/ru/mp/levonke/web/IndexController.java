@@ -15,7 +15,6 @@ public class IndexController {
 	}
 
 	@RequestMapping(value = "/reverse/{text}", method = GET)
-
 	@ResponseBody
 	public String reverseRequest(@PathVariable("text") String text) {
 		return reverse(text);

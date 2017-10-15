@@ -3,9 +3,10 @@ buildscript {
         mavenCentral()
     }
     dependencies {
+        classpath("org.projectlombok:lombok:1.16.18")
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
         classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
-        classpath 'org.hibernate:hibernate-core:5.2.11.Final'
+//        classpath 'org.hibernate:hibernate-core:5.2.11.Final'
     }
 }
 
@@ -52,9 +53,16 @@ junitPlatform {
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-data-rest')
+    compileOnly('org.projectlombok:lombok:1.16.18')
 
     // https://mvnrepository.com/artifact/org.hibernate/hibernate-core
-    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.2.11.Final'
+//    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.2.11.Final'
+
+    runtime('org.postgresql:postgresql')
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
 
     // JUnit Jupiter API and TestEngine implementation
     testCompile("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")

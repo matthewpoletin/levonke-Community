@@ -20,19 +20,34 @@ public class UserController {
 	@Autowired
 	UserServiceImpl userService;
 
+	// TODO: create getAllUsers query
+
 	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
 	public User getUser(@PathVariable("userId") final Integer userId) {
 		return userService.getUser(userId);
 	}
 
-	// TODO:
+	// TODO: add response with user id on body
+	// TODO: add check for existing username
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(method = RequestMethod.POST)
 	public void createUser(@RequestBody User user, HttpServletResponse response) {
 //		User user = userService.save(user);
 		userService.save(user);
-		response.addHeader(HttpHeaders.LOCATION, "/users/" + user.getId());
+//		User savedUser = userService.save(user);
+//		response.addHeader(HttpHeaders.LOCATION, "/users/" + savedUser.getId());
 	}
+
+	@ResponseStatus(HttpStatus.OK)
+	@RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
+	public void deleteUser(@PathVariable("userId") final Integer userId) {
+		userService.delete(userId);
+//		User user = userService.save(user);
+//		userService.save(user);
+//		response.addHeader(HttpHeaders.LOCATION, "/users/" + user.getId());
+	}
+
+
 
 //	@RequestMapping(value = "/", method = RequestMethod.GET)
 //	public HashMap<Integer, User> getAll()

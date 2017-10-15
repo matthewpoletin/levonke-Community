@@ -40,13 +40,15 @@ public class User {
 		this.fbLink = fbLink;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
+	// TODO: find out why doesnt work with those methods
+	// "message": "Invalid property 'id' of bean class [ru.mp.levonke.domain.User]: Getter for property 'id' threw exception; nested exception is java.lang.reflect.InvocationTargetException",
+//	public int getId() {
+//		return id;
+//	}
+//
+//	public void setId(int id) {
+//		this.id = id;
+//	}
 
 	public String getUsername() {
 		return username;

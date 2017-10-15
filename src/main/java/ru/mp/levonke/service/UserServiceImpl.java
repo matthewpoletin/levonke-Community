@@ -44,6 +44,12 @@ public class UserServiceImpl implements UserService {
 //		return userRepository.save(user);
 	}
 
+	@Override
+	@Transactional
+	public void delete(Integer userId) {
+		userRepository.delete(userId);
+	}
+
 //	public HashMap<Integer, User> getUsers() {
 ////		return users;
 //	}

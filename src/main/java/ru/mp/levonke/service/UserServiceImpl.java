@@ -9,6 +9,8 @@ import ru.mp.levonke.repository.UserRepository;
 import ru.mp.levonke.web.model.UserRequest;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.Currency;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -21,27 +23,40 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public User getUser(Integer userId) {
+	public Iterable<User> getUsers() {
+		return userRepository.findAll();
+//
+//		ArrayList<User> users = new ArrayList<User>();
+//		userRepository.findAll().forEach(users::add);
+//		return users;
+	}
+
+	@Override
+	@Transactional
+	public User create(User user) {
+		return userRepository.save(user);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public User read(Integer userId) {
 		User user = userRepository.findOne(userId);
 		if (user == null) {
-			throw new EntityNotFoundException("Customer '{" + userId + "}' not found");
+			throw new EntityNotFoundException("User '{" + userId + "}' not found");
 		}
 		return user;
 	}
 
 	@Override
 	@Transactional
-	public User save(User user) {
-		return userRepository.save(user);
-//		User user = new User();
-//			user.setUsername(userRequest.getUsername());
-////				.setUsername(userRequest.getUsername());
-////
-//////		Order order = new Order()
-//////				.setSum(orderRequest.getSum())
-//////				.setDiscount(orderRequest.getDiscount());
-////
-//		return userRepository.save(user);
+	public User update(Integer userId) {
+		User user = userRepository.findOne(userId);
+		if (user == null) {
+			throw new EntityNotFoundException("User '{" + userId + "}' not found");
+		}
+//		userRepository.
+//		return user.;
+		return null;
 	}
 
 	@Override
@@ -50,7 +65,4 @@ public class UserServiceImpl implements UserService {
 		userRepository.delete(userId);
 	}
 
-//	public HashMap<Integer, User> getUsers() {
-////		return users;
-//	}
 }

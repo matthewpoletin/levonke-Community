@@ -1,11 +1,13 @@
 package ru.mp.levonke.service;
 
+import java.util.ArrayList;
+
 import ru.mp.levonke.domain.User;
-import ru.mp.levonke.web.model.UserRequest;
 
 public interface UserService {
-	User save(User user);
-	User getUser(Integer userId);
-	// TODO: updateUser method
+	Iterable<User> getUsers();
+	User create(User user);
+	User read(Integer userId);
+	User update(Integer userId);
 	void delete(Integer userId);
 }

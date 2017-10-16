@@ -5,11 +5,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+//import java.util.ArrayList;
+
 import ru.mp.levonke.domain.User;
 import ru.mp.levonke.service.UserServiceImpl;
-import ru.mp.levonke.web.model.UserRequest;
-
-import javax.servlet.http.HttpServletResponse;
+//import ru.mp.levonke.web.model.UserResponse;
 
 @RestController
 @RequestMapping(UserController.USER_BASE_URI)
@@ -20,11 +21,17 @@ public class UserController {
 	@Autowired
 	UserServiceImpl userService;
 
-	// TODO: create getAllUsers query
+	@RequestMapping(method = RequestMethod.GET)
+	public Iterable<User> getUsers() {
+		return userService.getUsers();
+//		ArrayList<UserResponse> userResponses = new ArrayList<UserResponse>();
+//		userService.getUsers().forEach(user -> userResponses.add(new UserResponse(user)));
+//		return userResponses;
+	}
 
 	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
 	public User getUser(@PathVariable("userId") final Integer userId) {
-		return userService.getUser(userId);
+		return userService.read(userId);
 	}
 
 	// TODO: add response with user id on body
@@ -32,10 +39,18 @@ public class UserController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(method = RequestMethod.POST)
 	public void createUser(@RequestBody User user, HttpServletResponse response) {
-//		User user = userService.save(user);
-		userService.save(user);
-//		User savedUser = userService.save(user);
+//		userService.create(user);
+		User savedUser = userService.create(user);
+//		response.
 //		response.addHeader(HttpHeaders.LOCATION, "/users/" + savedUser.getId());
+	}
+
+	// TODO: implement this method
+	@ResponseStatus(HttpStatus.OK)
+	@RequestMapping(value = "/{userId}", method = RequestMethod.PATCH)
+	public void updateUser(@PathVariable("userId") final Integer userId) {
+		userService.update(userId);
+//		response.addHeader(HttpHeaders.LOCATION, "/users/" + user.getId());
 	}
 
 	@ResponseStatus(HttpStatus.OK)
@@ -46,20 +61,5 @@ public class UserController {
 //		userService.save(user);
 //		response.addHeader(HttpHeaders.LOCATION, "/users/" + user.getId());
 	}
-
-
-
-//	@RequestMapping(value = "/", method = RequestMethod.GET)
-//	public HashMap<Integer, User> getAll()
-//	{
-////		return userService.getUsers();
-//		return null;
-//	}
-
-//	@RequestMapping(value = "/all", method = RequestMethod.GET)
-//	public HashMap<Integer, User> getPage(@RequestParam("page") int page, @RequestParam("size") int size) {
-////		return userService.getUsers();
-//		return null;
-//	}
 
 }

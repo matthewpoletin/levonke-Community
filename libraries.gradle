@@ -1,0 +1,4 @@
+ext {
+    postgresDriverVersion = "9.4.1211.jre7"
+    lombokVersion = "1.16.18"
+}

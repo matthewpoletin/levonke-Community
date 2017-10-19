@@ -6,11 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-//import java.util.ArrayList;
 
 import ru.mp.levonke.domain.User;
 import ru.mp.levonke.service.UserServiceImpl;
-//import ru.mp.levonke.web.model.UserResponse;
+import ru.mp.levonke.web.model.UserRequest;
+import ru.mp.levonke.web.model.UserResponse;
+
+import java.util.ArrayList;
 
 @RestController
 @RequestMapping(UserController.USER_BASE_URI)
@@ -22,44 +24,34 @@ public class UserController {
 	UserServiceImpl userService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public Iterable<User> getUsers() {
-		return userService.getUsers();
-//		ArrayList<UserResponse> userResponses = new ArrayList<UserResponse>();
-//		userService.getUsers().forEach(user -> userResponses.add(new UserResponse(user)));
-//		return userResponses;
+	public ArrayList<UserResponse> getUsers() {
+		ArrayList<UserResponse> userResponses = new ArrayList<UserResponse>();
+		userService.getUsers().forEach(user -> userResponses.add(new UserResponse(user)));
+		return userResponses;
 	}
 
 	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-	public User getUser(@PathVariable("userId") final Integer userId) {
-		return userService.read(userId);
+	public UserResponse getUser(@PathVariable("userId") final Integer userId) {
+		return new UserResponse(userService.read(userId));
 	}
 
-	// TODO: add response with user id on body
-	// TODO: add check for existing username
+	// TODO: add check for existing username (or leave UNIQUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(method = RequestMethod.POST)
-	public void createUser(@RequestBody User user, HttpServletResponse response) {
-//		userService.create(user);
-		User savedUser = userService.create(user);
-//		response.
-//		response.addHeader(HttpHeaders.LOCATION, "/users/" + savedUser.getId());
+	public void createUser(@RequestBody UserRequest userRequest, HttpServletResponse response) {
+		User user = userService.create(userRequest);
+		response.addHeader(HttpHeaders.LOCATION, this.USER_BASE_URI + "/" + user.getId());
 	}
 
-	// TODO: implement this method
-	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(value = "/{userId}", method = RequestMethod.PATCH)
-	public void updateUser(@PathVariable("userId") final Integer userId) {
-		userService.update(userId);
-//		response.addHeader(HttpHeaders.LOCATION, "/users/" + user.getId());
+	public UserResponse updateUser(@PathVariable("userId") final Integer userId, @RequestBody UserRequest userRequest) {
+		return new UserResponse(userService.update(userId, userRequest));
 	}
 
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
 	public void deleteUser(@PathVariable("userId") final Integer userId) {
 		userService.delete(userId);
-//		User user = userService.save(user);
-//		userService.save(user);
-//		response.addHeader(HttpHeaders.LOCATION, "/users/" + user.getId());
 	}
 
 }

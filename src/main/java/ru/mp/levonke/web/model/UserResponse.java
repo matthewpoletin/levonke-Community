@@ -1,7 +1,6 @@
 package ru.mp.levonke.web.model;
 
 import lombok.Data;
-//import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import ru.mp.levonke.domain.User;
@@ -9,6 +8,7 @@ import ru.mp.levonke.domain.User;
 @Data
 @NoArgsConstructor
 public class UserResponse {
+	private Integer id;
 	private String username;
 	private String firstname;
 	private String surname;
@@ -18,6 +18,7 @@ public class UserResponse {
 	private String fbLink;
 
 	public UserResponse(User user) {
+		this.id = user.getId();
 		this.username = user.getUsername();
 		this.firstname = user.getFirstname();
 		this.surname = user.getSurname();

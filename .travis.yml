@@ -11,6 +11,6 @@ deploy:
     secure: BpwTCPlA6aB9J3jFg2CiO8Q9zTkXmra/4kAycSf4CFzVndJQ4Qla+eDa/6FdhvTxdOkWEg9i7kMSCQPdXMmrFerTg9ENklIZ1hA7b9rScY1iCLh+In6xW8gvoGy/tvWycf99Zl/4DL7vW3G5Mt/Dpe5oIuLqMvjpqFG26iAjV9LHbjh3ZsKYL4BhdQOsupCtfWPmlwwr0KNdOHqQ2s0sNPFZGeI6WfapEhXeyp9oWaDesBbwhw88xDqC4bIKFLoBGF5wh9wJQgaFT1oGoT+APH2f+ePIJpHZMNftVqod8ZFhFUIO+SGUR2WsQmd+Q/ySpFYzGv71YAKqSOoPqdtu6V2MuwaSp1BoWoAutUPI+suOW+VRRNVquZqeAMiEz2AUmk/gqpKXyJtsHjSmg9JMaGySpvzmCBzlRmhmMGkc5WJYx2wPp5/4VuSgGHbezD0hga6UkBwr+FdvdEkknP/o+FCkQBkuUhLPOqRAgVkAGptonjQ0p07zXUnIJQxfBMAw6mqLZZkAWiJrPY5+W6+m4bUVqaRFiFOkyt5ME8mIKJRryEP9LpBGWuRjFLpzZLowCAOYynHJrDkTir+GmcSS1FhjmY2+98/5YuZihwX4jYuE1rtmN7o0JZ+mb/PDSczFkoRCqjJA7oHtPwczXmGwtzERDHrZzlwsEx8wMoEjYnU=
   app: levonke
   on:
-    repo: matthewpoletin/levonke
+    repo: matthewpoletin/levonke.Community
 notifications:
   email: false

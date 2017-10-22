@@ -28,16 +28,16 @@ public class OrganizationController {
 		return organizationResponses;
 	}
 
-	@RequestMapping(value = "/{organizationId}", method = RequestMethod.GET)
-	public OrganizationResponse getOrganization(@PathVariable("organizationId") final Integer organizationId) {
-		return new OrganizationResponse(organizationService.read(organizationId));
-	}
-
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(method = RequestMethod.POST)
 	public  void createOrganization(@RequestBody OrganizationRequest organizationRequest, HttpServletResponse response) {
 		Organization organization = organizationService.create(organizationRequest);
 		response.addHeader(HttpHeaders.LOCATION, this.ORGANIZATION_BASE_URI + "/" + organization.getId());
+	}
+
+	@RequestMapping(value = "/{organizationId}", method = RequestMethod.GET)
+	public OrganizationResponse getOrganization(@PathVariable("organizationId") final Integer organizationId) {
+		return new OrganizationResponse(organizationService.read(organizationId));
 	}
 
 	@RequestMapping(value = "/{organizationId}", method = RequestMethod.PATCH)

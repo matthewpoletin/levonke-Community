@@ -30,17 +30,17 @@ public class UserController {
 		return userResponses;
 	}
 
-	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-	public UserResponse getUser(@PathVariable("userId") final Integer userId) {
-		return new UserResponse(userService.read(userId));
-	}
-
 	// TODO: add check for existing username (or leave UNIQUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(method = RequestMethod.POST)
 	public void createUser(@RequestBody UserRequest userRequest, HttpServletResponse response) {
 		User user = userService.create(userRequest);
 		response.addHeader(HttpHeaders.LOCATION, this.USER_BASE_URI + "/" + user.getId());
+	}
+
+	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+	public UserResponse getUser(@PathVariable("userId") final Integer userId) {
+		return new UserResponse(userService.read(userId));
 	}
 
 	@RequestMapping(value = "/{userId}", method = RequestMethod.PATCH)

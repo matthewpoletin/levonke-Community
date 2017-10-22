@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Data
 @Entity
@@ -32,5 +34,9 @@ public class Organization {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "organizations_owner_id")
 	private User owner;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
+	private Collection<Team> teams = new ArrayList<Team>();
 
 }

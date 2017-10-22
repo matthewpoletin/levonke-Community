@@ -6,7 +6,6 @@ import ru.mp.levonke.domain.User;
 
 @Data
 public class OrganizationRequest {
-	Integer id;
 	String name;
 	String description;
 	String pubEmail;

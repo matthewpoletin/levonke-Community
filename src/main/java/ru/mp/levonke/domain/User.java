@@ -42,4 +42,6 @@ public class User {
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
 	private Collection<Organization> organizations = new ArrayList<Organization>();
 
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private Collection<Team> teams = new ArrayList<Team>();
 }

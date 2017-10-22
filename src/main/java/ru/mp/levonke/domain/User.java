@@ -1,5 +1,6 @@
 package ru.mp.levonke.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import javax.persistence.*;
@@ -37,6 +38,7 @@ public class User {
 	@Column(name = "users_fblink")
 	private String fbLink;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
 	private Collection<Organization> organizations = new ArrayList<Organization>();
 

@@ -28,8 +28,8 @@ public class OrganizationController {
 		return organizationResponses;
 	}
 
-	@RequestMapping(value = "{organizationId}", method = RequestMethod.GET)
-	public OrganizationResponse getOrganization(final Integer organizationId) {
+	@RequestMapping(value = "/{organizationId}", method = RequestMethod.GET)
+	public OrganizationResponse getOrganization(@PathVariable("organizationId") final Integer organizationId) {
 		return new OrganizationResponse(organizationService.read(organizationId));
 	}
 

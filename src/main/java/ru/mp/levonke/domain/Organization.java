@@ -1,8 +1,8 @@
 package ru.mp.levonke.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.experimental.Accessors;
-
 import javax.persistence.*;
 
 @Data
@@ -28,6 +28,7 @@ public class Organization {
 	@Column(name = "organizations_website")
 	private String website;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "organizations_owner_id")
 	private User owner;

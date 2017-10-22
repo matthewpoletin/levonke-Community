@@ -2,52 +2,42 @@ package ru.mp.levonke.domain;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-
 import javax.persistence.*;
+import java.util.*;
 
 @Data
-@Accessors(chain = true)
 @Entity
+@Accessors(chain = true)
 @Table(name = "users", schema = "community")
 public class User {
 
 	@Id
-	@Column(name = "id")
+	@Column(name = "users_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(name = "username")
+	@Column(name = "users_username", unique = true)
 	private String username;
 
-	@Column(name = "firstname")
+	@Column(name = "users_firstname")
 	private String firstname;
 
-	@Column(name = "surname")
+	@Column(name = "users_surname")
 	private String surname;
 
-	@Column(name = "regemail")
+	@Column(name = "users_regemail")
 	private String regEmail;
 
-	@Column(name = "pubemail")
+	@Column(name = "users_pubemail")
 	private String pubEmail;
 
-	@Column(name = "ghlink")
+	@Column(name = "users_ghlink")
 	private String ghLink;
 
-	@Column(name = "fblink")
+	@Column(name = "users_fblink")
 	private String fbLink;
 
-	public User() {
-	}
-
-	public User(String username, String firstname, String surname, String regEmail, String pubEmail, String ghLink, String fbLink) {
-		this.username = username;
-		this.firstname = firstname;
-		this.surname = surname;
-		this.regEmail = regEmail;
-		this.pubEmail = pubEmail;
-		this.ghLink = ghLink;
-		this.fbLink = fbLink;
-	}
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+	private Collection<Organization> organizations = new ArrayList<Organization>();
 
 }

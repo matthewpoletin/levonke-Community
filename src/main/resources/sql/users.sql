@@ -1,13 +1,12 @@
-CREATE TABLE community.users (
-  id SERIAL PRIMARY KEY,
-  username VARCHAR(255) UNIQUE,
-  firstname VARCHAR(255),
-  surname VARCHAR(255),
-  regEmail VARCHAR(255),
-  pubEmail VARCHAR(255),
-  ghLink VARCHAR(255),
-  fbLink VARCHAR(255)
+CREATE TABLE community.users
+(
+    users_id integer DEFAULT nextval('community.users_users_id_seq'::regclass) PRIMARY KEY NOT NULL,
+    users_fblink varchar(255),
+    users_firstname varchar(255),
+    users_ghlink varchar(255),
+    users_pubemail varchar(255),
+    users_regemail varchar(255),
+    users_surname varchar(255),
+    users_username varchar(255)
 );
-
-INSERT INTO community.users(username, firstname, surname, regemail, pubemail, ghlink, fbLink) VALUES ('MatthewPoletin', 'Matthew', 'Poletin', 'poletinm@yandex.ru', 'contact@matthewpoletin.ru', 'github.com/matthewpoletin', 'fb.me/matthewpoletin');
-INSERT INTO community.users(username, firstname, surname, regemail, pubemail, ghlink, fbLink) VALUES ('kormvina', 'Ksenia', 'Strogina', 'ksyshkazaglushka@mail.ru', 'stroginakp@student.bmstu.ru', 'github.com/kormvina', 'fb.me/kseniastrogina');
+CREATE UNIQUE INDEX uk_o8aun046cuf6ekagariotbu35 ON community.users (users_username);

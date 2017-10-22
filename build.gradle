@@ -1,27 +1,34 @@
 buildscript {
+    ext {
+        springBootVersion='1.5.3.RELEASE'
+        lombokVersion = '1.16.18'
+        postgresDriverVersion = '9.4.1211.jre7'
+    }
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("org.projectlombok:lombok:${lombokVersion}")
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
+        classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.0")
     }
 }
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
-ext.junitPlatformVersion = '1.0.0'
-ext.junitJupiterVersion  = '5.0.0'
-ext.log4jVersion         = '2.6.2'
-
+apply plugin: 'groovy'
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'org.junit.platform.gradle.plugin'
-apply from: 'libraries.gradle'
+
+ext.junitPlatformVersion = '1.0.0'
+ext.junitJupiterVersion  = '5.0.0'
+ext.log4jVersion         = '2.6.2'
 
 jar {
     baseName = 'levonke'
@@ -34,28 +41,11 @@ compileTestJava {
     options.compilerArgs += '-parameters'
 }
 
-junitPlatform {
-    // platformVersion '1.0.0'
-    filters {
-        engines {
-             include 'junit-jupiter'
-        }
-        tags {
-            exclude 'slow'
-        }
-        // includeClassNamePattern '.*Test'
-    }
-    // configurationParameter 'junit.jupiter.conditions.deactivate', '*'
-    // enableStandardTestTask true
-    // reportsDir file('build/test-results/junit-platform') // this is the default
-    logManager 'org.apache.logging.log4j.jul.LogManager'
-}
-
 dependencies {
-    compile "org.springframework.boot:spring-boot-starter-web"
+    compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('org.springframework.boot:spring-boot-starter-data-rest')
-    compile "org.projectlombok:lombok:${lombokVersion}"
+    compile('org.projectlombok:lombok:${lombokVersion}')
 
     runtime('org.postgresql:postgresql')
 
@@ -69,7 +59,19 @@ dependencies {
     testRuntime("org.apache.logging.log4j:log4j-jul:${log4jVersion}")
 }
 
-task wrapper(type: Wrapper) {
-    description = 'Generates gradlew[.bat] scripts'
-    gradleVersion = '4.0.1'
+junitPlatform {
+    // platformVersion '1.0.0'
+    filters {
+        engines {
+            include 'junit-jupiter'
+        }
+        tags {
+            exclude 'slow'
+        }
+        // includeClassNamePattern '.*Test'
+    }
+    // configurationParameter 'junit.jupiter.conditions.deactivate', '*'
+    // enableStandardTestTask true
+    // reportsDir file('build/test-results/junit-platform') // this is the default
+    logManager 'org.apache.logging.log4j.jul.LogManager'
 }

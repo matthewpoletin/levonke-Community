@@ -1,0 +1,2 @@
+CREATE SCHEMA community
+  AUTHORIZATION levonke;

@@ -40,8 +40,8 @@ public class User {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-	private Collection<Organization> organizations = new ArrayList<Organization>();
+	private Collection<Organization> organizations = new ArrayList<>();
 
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	private Collection<Team> teams = new ArrayList<Team>();
+	private Collection<Team> teams = new ArrayList<>();
 }

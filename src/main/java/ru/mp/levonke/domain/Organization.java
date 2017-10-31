@@ -37,6 +37,6 @@ public class Organization {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
-	private Collection<Team> teams = new ArrayList<Team>();
+	private Collection<Team> teams = new ArrayList<>();
 
 }

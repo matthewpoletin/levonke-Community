@@ -24,10 +24,10 @@ public class Team {
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "teams_orgnaization_id")
+	@JoinColumn(name = "teams_organization_id")
 	private Organization organization;
 
 	@ManyToMany(mappedBy = "teams")
-	private Collection<User> users = new ArrayList<User>();
+	private Collection<User> users = new ArrayList<>();
 
 }

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 @RequestMapping(TeamController.TEAM_BASE_URI)
 public class TeamController {
 
-	public static final String TEAM_BASE_URI = "/teams";
+	public static final String TEAM_BASE_URI = "/api/community/teams";
 
 	@Autowired
 	TeamServiceImpl teamService;

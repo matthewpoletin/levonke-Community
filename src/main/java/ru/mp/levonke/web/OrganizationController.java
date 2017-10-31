@@ -16,7 +16,7 @@ import ru.mp.levonke.web.model.OrganizationResponse;
 @RestController
 @RequestMapping(OrganizationController.ORGANIZATION_BASE_URI)
 public class OrganizationController {
-	public static final String ORGANIZATION_BASE_URI = "/organizations";
+	public static final String ORGANIZATION_BASE_URI = "/api/community/organizations";
 
 	@Autowired
 	OrganizationServiceImpl organizationService;

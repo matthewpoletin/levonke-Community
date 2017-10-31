@@ -18,7 +18,7 @@ import java.util.ArrayList;
 @RequestMapping(UserController.USER_BASE_URI)
 public class UserController {
 
-	public static final String USER_BASE_URI = "/users";
+	public static final String USER_BASE_URI = "/api/community/users";
 
 	@Autowired
 	UserServiceImpl userService;

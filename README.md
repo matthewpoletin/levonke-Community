@@ -1,9 +1,6 @@
 # levonke
-Распределённые системы обработки информации
-Лабораторная работа №1
-Группа ИУ7-13М
-Полётин МА
+Community micro-service for levonke
 
-[![Build Status](https://travis-ci.org/matthewpoletin/levonke.svg?branch=master)](https://travis-ci.org/matthewpoletin/levonke)
+[![Build Status](https://travis-ci.org/matthewpoletin/levonke-Community.svg?branch=master)](https://travis-ci.org/matthewpoletin/levonke-Community)
 
-[Heroku](https://levonke.herokuapp.com)
+[Heroku](https://levonkeCommunity.herokuapp.com)

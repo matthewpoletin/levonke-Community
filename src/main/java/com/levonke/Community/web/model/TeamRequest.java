@@ -1,4 +1,4 @@
-package ru.mp.levonke.web.model;
+package com.levonke.Community.web.model;
 
 import lombok.Data;
 

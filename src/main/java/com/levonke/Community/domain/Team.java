@@ -1,4 +1,4 @@
-package ru.mp.levonke.domain;
+package com.levonke.Community.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

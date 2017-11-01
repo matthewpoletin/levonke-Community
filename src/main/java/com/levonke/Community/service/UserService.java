@@ -1,7 +1,7 @@
-package ru.mp.levonke.service;
+package com.levonke.Community.service;
 
-import ru.mp.levonke.domain.User;
-import ru.mp.levonke.web.model.UserRequest;
+import com.levonke.Community.domain.User;
+import com.levonke.Community.web.model.UserRequest;
 
 public interface UserService {
 	Iterable<User> getUsers();

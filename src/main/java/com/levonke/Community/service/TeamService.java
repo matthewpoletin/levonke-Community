@@ -1,7 +1,7 @@
-package ru.mp.levonke.service;
+package com.levonke.Community.service;
 
-import ru.mp.levonke.domain.Team;
-import ru.mp.levonke.web.model.TeamRequest;
+import com.levonke.Community.domain.Team;
+import com.levonke.Community.web.model.TeamRequest;
 
 public interface TeamService {
 	Iterable<Team> getTeams();

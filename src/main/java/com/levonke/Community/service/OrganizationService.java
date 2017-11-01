@@ -1,7 +1,7 @@
-package ru.mp.levonke.service;
+package com.levonke.Community.service;
 
-import ru.mp.levonke.domain.Organization;
-import ru.mp.levonke.web.model.OrganizationRequest;
+import com.levonke.Community.domain.Organization;
+import com.levonke.Community.web.model.OrganizationRequest;
 
 public interface OrganizationService {
 	Iterable<Organization> getOrganizations();

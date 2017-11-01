@@ -1,14 +1,14 @@
-package ru.mp.levonke.service;
+package com.levonke.Community.service;
 
+import com.levonke.Community.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 
-import ru.mp.levonke.domain.User;
-import ru.mp.levonke.repository.UserRepository;
-import ru.mp.levonke.web.model.UserRequest;
+import com.levonke.Community.repository.UserRepository;
+import com.levonke.Community.web.model.UserRequest;
 
 @Service
 public class UserServiceImpl implements UserService {

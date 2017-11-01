@@ -1,7 +1,7 @@
-package ru.mp.levonke.web.model;
+package com.levonke.Community.web.model;
 
 import lombok.Data;
-import ru.mp.levonke.domain.Team;
+import com.levonke.Community.domain.Team;
 
 @Data
 public class TeamResponse {

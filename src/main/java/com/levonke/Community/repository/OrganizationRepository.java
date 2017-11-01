@@ -1,8 +1,7 @@
-package ru.mp.levonke.repository;
+package com.levonke.Community.repository;
 
+import com.levonke.Community.domain.Organization;
 import org.springframework.data.repository.CrudRepository;
-
-import ru.mp.levonke.domain.Organization;
 
 public interface OrganizationRepository
 		extends CrudRepository<Organization, Integer> {

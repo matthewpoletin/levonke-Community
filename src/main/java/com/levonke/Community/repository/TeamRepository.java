@@ -1,7 +1,7 @@
-package ru.mp.levonke.repository;
+package com.levonke.Community.repository;
 
+import com.levonke.Community.domain.Team;
 import org.springframework.data.repository.CrudRepository;
-import ru.mp.levonke.domain.Team;
 
 public interface TeamRepository
 		extends CrudRepository<Team, Integer> {

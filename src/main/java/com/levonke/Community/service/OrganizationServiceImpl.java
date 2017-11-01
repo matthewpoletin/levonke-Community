@@ -1,11 +1,11 @@
-package ru.mp.levonke.service;
+package com.levonke.Community.service;
 
+import com.levonke.Community.web.model.OrganizationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mp.levonke.domain.Organization;
-import ru.mp.levonke.repository.OrganizationRepository;
-import ru.mp.levonke.web.model.OrganizationRequest;
+import com.levonke.Community.domain.Organization;
+import com.levonke.Community.repository.OrganizationRepository;
 
 import javax.persistence.EntityNotFoundException;
 

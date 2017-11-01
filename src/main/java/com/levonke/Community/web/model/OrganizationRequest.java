@@ -1,8 +1,7 @@
-package ru.mp.levonke.web.model;
+package com.levonke.Community.web.model;
 
+import com.levonke.Community.domain.User;
 import lombok.Data;
-
-import ru.mp.levonke.domain.User;
 
 @Data
 public class OrganizationRequest {

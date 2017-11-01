@@ -1,14 +1,14 @@
-package ru.mp.levonke.web;
+package com.levonke.Community.web;
 
+import com.levonke.Community.service.TeamServiceImpl;
+import com.levonke.Community.web.model.TeamResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import ru.mp.levonke.domain.Team;
-import ru.mp.levonke.service.TeamServiceImpl;
-import ru.mp.levonke.web.model.TeamRequest;
-import ru.mp.levonke.web.model.TeamResponse;
+import com.levonke.Community.domain.Team;
+import com.levonke.Community.web.model.TeamRequest;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;

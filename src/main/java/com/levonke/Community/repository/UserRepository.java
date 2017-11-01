@@ -1,8 +1,7 @@
-package ru.mp.levonke.repository;
+package com.levonke.Community.repository;
 
+import com.levonke.Community.domain.User;
 import org.springframework.data.repository.CrudRepository;
-
-import ru.mp.levonke.domain.User;
 
 public interface UserRepository
 		extends CrudRepository<User, Integer> {

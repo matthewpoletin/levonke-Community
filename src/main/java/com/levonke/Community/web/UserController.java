@@ -1,5 +1,8 @@
-package ru.mp.levonke.web;
+package com.levonke.Community.web;
 
+import com.levonke.Community.domain.User;
+import com.levonke.Community.service.UserServiceImpl;
+import com.levonke.Community.web.model.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -7,10 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
-import ru.mp.levonke.domain.User;
-import ru.mp.levonke.service.UserServiceImpl;
-import ru.mp.levonke.web.model.UserRequest;
-import ru.mp.levonke.web.model.UserResponse;
+import com.levonke.Community.web.model.UserResponse;
 
 import java.util.ArrayList;
 

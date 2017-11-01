@@ -1,4 +1,4 @@
-package ru.mp.levonke.web;
+package com.levonke.Community.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
-import ru.mp.levonke.domain.Organization;
-import ru.mp.levonke.service.OrganizationServiceImpl;
-import ru.mp.levonke.web.model.OrganizationRequest;
-import ru.mp.levonke.web.model.OrganizationResponse;
+import com.levonke.Community.domain.Organization;
+import com.levonke.Community.service.OrganizationServiceImpl;
+import com.levonke.Community.web.model.OrganizationRequest;
+import com.levonke.Community.web.model.OrganizationResponse;
 
 @RestController
 @RequestMapping(OrganizationController.ORGANIZATION_BASE_URI)

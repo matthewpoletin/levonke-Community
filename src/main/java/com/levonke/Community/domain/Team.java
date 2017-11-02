@@ -26,7 +26,8 @@ public class Team {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "teams_organization_id")
 	private Organization organization;
-
+	
+	@JsonIgnore
 	@ManyToMany(mappedBy = "teams")
 	private Collection<User> users = new ArrayList<>();
 

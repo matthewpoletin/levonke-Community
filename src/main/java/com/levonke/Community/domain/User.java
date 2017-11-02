@@ -41,7 +41,8 @@ public class User {
 	@JsonIgnore
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
 	private Collection<Organization> organizations = new ArrayList<>();
-
+	
+	@JsonIgnore
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private Collection<Team> teams = new ArrayList<>();
 }

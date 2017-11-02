@@ -18,7 +18,7 @@ public class OrganizationResponse {
 		this.name = organization.getName();
 		this.description = organization.getName();
 		this.pubEmail = organization.getPubEmail();
-		this.website = organization.getPubEmail();
+		this.website = organization.getWebsite();
 		this.owner = organization.getOwner();
 	}
 }

@@ -25,11 +25,11 @@ public class UserServiceImpl implements UserService {
 	@Transactional(readOnly = true)
 	public List<User> getUsers(Integer page, Integer size) {
 		if(page == null)
-			page = 1;
+			page = 0;
 		if (size == null) {
 			size = 25;
 		}
-		return userRepository.findAll(new PageRequest(page - 1, size)).getContent();
+		return userRepository.findAll(new PageRequest(page, size)).getContent();
 	}
 	
 	@Override

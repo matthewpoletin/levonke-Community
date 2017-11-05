@@ -25,12 +25,12 @@ public class OrganizationServiceImpl implements OrganizationService {
 	@Transactional(readOnly = true)
 	public List<Organization> getOrganizations(Integer page, Integer size) {
 		if (page == null) {
-			page = 1;
+			page = 0;
 		}
 		if (size == null) {
 			size = 25;
 		}
-		return organizationRepository.findAll(new PageRequest(page - 1, size)).getContent();
+		return organizationRepository.findAll(new PageRequest(page, size)).getContent();
 	}
 
 	@Override

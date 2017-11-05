@@ -25,11 +25,11 @@ public class TeamServiceImpl implements TeamService {
 	@Transactional(readOnly = true)
 	public List<Team> getTeams(Integer page, Integer size) {
 		if(page == null)
-			page = 1;
+			page = 0;
 		if (size == null) {
 			size = 25;
 		}
-		return teamRepository.findAll(new PageRequest(page - 1, size)).getContent();
+		return teamRepository.findAll(new PageRequest(page, size)).getContent();
 	}
 
 	@Override

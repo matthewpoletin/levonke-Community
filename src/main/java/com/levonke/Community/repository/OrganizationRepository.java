@@ -1,9 +1,9 @@
 package com.levonke.Community.repository;
 
 import com.levonke.Community.domain.Organization;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrganizationRepository
-		extends CrudRepository<Organization, Integer> {
+		extends JpaRepository<Organization, Integer> {
 
 }

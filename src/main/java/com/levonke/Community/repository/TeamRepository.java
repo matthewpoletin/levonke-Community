@@ -1,8 +1,8 @@
 package com.levonke.Community.repository;
 
 import com.levonke.Community.domain.Team;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TeamRepository
-		extends CrudRepository<Team, Integer> {
+		extends JpaRepository<Team, Integer> {
 }

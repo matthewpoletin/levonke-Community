@@ -1,31 +1,37 @@
 package com.levonke.Community.web;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-
 import com.levonke.Community.domain.Organization;
 import com.levonke.Community.service.OrganizationServiceImpl;
 import com.levonke.Community.web.model.OrganizationRequest;
 import com.levonke.Community.web.model.OrganizationResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping(OrganizationController.ORGANIZATION_BASE_URI)
 public class OrganizationController {
+	
 	public static final String ORGANIZATION_BASE_URI = "/api/community/organizations";
 
+	private OrganizationServiceImpl organizationService;
+	
 	@Autowired
-	OrganizationServiceImpl organizationService;
-
+	OrganizationController(OrganizationServiceImpl organizationService) {
+		this.organizationService = organizationService;
+	}
+	
 	@RequestMapping(method = RequestMethod.GET)
-	public ArrayList<OrganizationResponse> getOrganizations() {
-		ArrayList<OrganizationResponse> organizationResponses = new ArrayList<OrganizationResponse>();
-		organizationService.getOrganizations().forEach(organization -> organizationResponses.add(new OrganizationResponse(organization)));
-		return organizationResponses;
+	public List<OrganizationResponse> getOrganizations(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size) {
+		return organizationService.getOrganizations(page, size)
+			.stream()
+			.map(OrganizationResponse::new)
+			.collect(Collectors.toList());
 	}
 
 	@ResponseStatus(HttpStatus.CREATED)

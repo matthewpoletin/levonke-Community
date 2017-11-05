@@ -1,13 +1,15 @@
 package com.levonke.Community.service;
 
 import com.levonke.Community.web.model.OrganizationRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.levonke.Community.domain.Organization;
 import com.levonke.Community.repository.OrganizationRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
@@ -21,8 +23,14 @@ public class OrganizationServiceImpl implements OrganizationService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Iterable<Organization> getOrganizations() {
-		return organizationRepository.findAll();
+	public List<Organization> getOrganizations(Integer page, Integer size) {
+		if (page == null) {
+			page = 1;
+		}
+		if (size == null) {
+			size = 25;
+		}
+		return organizationRepository.findAll(new PageRequest(page - 1, size)).getContent();
 	}
 
 	@Override

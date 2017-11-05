@@ -1,30 +1,37 @@
 package com.levonke.Community.service;
 
 import com.levonke.Community.domain.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
-
 import com.levonke.Community.repository.UserRepository;
 import com.levonke.Community.web.model.UserRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
+	
 	private final UserRepository userRepository;
 
 	@Autowired
 	public UserServiceImpl(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
-
+	
 	@Override
 	@Transactional(readOnly = true)
-	public Iterable<User> getUsers() {
-		return userRepository.findAll();
+	public List<User> getUsers(Integer page, Integer size) {
+		if(page == null)
+			page = 1;
+		if (size == null) {
+			size = 25;
+		}
+		return userRepository.findAll(new PageRequest(page - 1, size)).getContent();
 	}
-
+	
 	@Override
 	@Transactional
 	public User create(UserRequest userRequest) {

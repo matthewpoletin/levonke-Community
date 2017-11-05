@@ -3,16 +3,15 @@ package com.levonke.Community.web;
 import com.levonke.Community.domain.User;
 import com.levonke.Community.service.UserServiceImpl;
 import com.levonke.Community.web.model.UserRequest;
+import com.levonke.Community.web.model.UserResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletResponse;
-
-import com.levonke.Community.web.model.UserResponse;
-
-import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(UserController.USER_BASE_URI)
@@ -20,14 +19,19 @@ public class UserController {
 
 	public static final String USER_BASE_URI = "/api/community/users";
 
+	private final UserServiceImpl userService;
+	
 	@Autowired
-	UserServiceImpl userService;
-
+	UserController(UserServiceImpl userService) {
+		this.userService = userService;
+	}
+	
 	@RequestMapping(method = RequestMethod.GET)
-	public ArrayList<UserResponse> getUsers() {
-		ArrayList<UserResponse> userResponses = new ArrayList<UserResponse>();
-		userService.getUsers().forEach(user -> userResponses.add(new UserResponse(user)));
-		return userResponses;
+	public List<UserResponse> getUsers(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size) {
+		return userService.getUsers(page, size)
+			.stream()
+			.map(UserResponse::new)
+			.collect(Collectors.toList());
 	}
 
 	// TODO: add check for existing username (or leave UNIQUE)

@@ -1,13 +1,15 @@
 package com.levonke.Community.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.levonke.Community.domain.Team;
 import com.levonke.Community.repository.TeamRepository;
 import com.levonke.Community.web.model.TeamRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Service
 public class TeamServiceImpl implements TeamService {
@@ -21,8 +23,13 @@ public class TeamServiceImpl implements TeamService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Iterable<Team> getTeams() {
-		return teamRepository.findAll();
+	public List<Team> getTeams(Integer page, Integer size) {
+		if(page == null)
+			page = 1;
+		if (size == null) {
+			size = 25;
+		}
+		return teamRepository.findAll(new PageRequest(page - 1, size)).getContent();
 	}
 
 	@Override

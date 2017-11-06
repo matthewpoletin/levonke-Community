@@ -1,18 +1,22 @@
 package com.levonke.Community.web.model;
 
-import lombok.Data;
 import com.levonke.Community.domain.Team;
+
+import lombok.Data;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class TeamResponse {
 	private Integer id;
 	private String name;
-//	private Organization organization;
-//	private Collection<User> team = new ArrayList<User>();
+	private Integer organizationId;
+	private List<Integer> usersId = new ArrayList<>();
 
 	public TeamResponse(Team team) {
 		this.id = team.getId();
 		this.name = team.getName();
-		// TODO: add workout for organization and users
+		this.organizationId = team.getOrganization().getId();
+		team.getUsers().forEach(user -> this.usersId.add(user.getId()));
 	}
 }

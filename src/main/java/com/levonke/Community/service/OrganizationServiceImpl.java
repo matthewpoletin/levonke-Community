@@ -1,5 +1,6 @@
 package com.levonke.Community.service;
 
+import com.levonke.Community.domain.User;
 import com.levonke.Community.web.model.OrganizationRequest;
 import com.levonke.Community.domain.Organization;
 import com.levonke.Community.repository.OrganizationRepository;
@@ -15,10 +16,12 @@ import java.util.List;
 public class OrganizationServiceImpl implements OrganizationService {
 
 	private final OrganizationRepository organizationRepository;
+	private final UserServiceImpl userService;
 
 	@Autowired
-	public OrganizationServiceImpl(OrganizationRepository organizationRepository) {
+	public OrganizationServiceImpl(OrganizationRepository organizationRepository, UserServiceImpl userService) {
 		this.organizationRepository = organizationRepository;
+		this.userService = userService;
 	}
 
 	@Override
@@ -65,7 +68,12 @@ public class OrganizationServiceImpl implements OrganizationService {
 		organization.setDescription(organizationRequest.getDescription() != null ? organizationRequest.getDescription() : organization.getDescription());
 		organization.setPubEmail(organizationRequest.getPubEmail() != null ? organizationRequest.getPubEmail() : organization.getPubEmail());
 		organization.setWebsite(organizationRequest.getWebsite() != null ? organizationRequest.getWebsite() : organization.getWebsite());
-		organization.setOwner(organizationRequest.getOwner() != null ? organizationRequest.getOwner() : organization.getOwner());
+		if (organizationRequest.getOwnerId() != null) {
+			User user = userService.read(organizationRequest.getOwnerId());
+			if (user != null) {
+				organization.setOwner(user);
+			}
+		}
 		return organizationRepository.save(organization);
 	}
 

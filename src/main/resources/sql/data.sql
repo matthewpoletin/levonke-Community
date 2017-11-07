@@ -1,10 +1,10 @@
-INSERT INTO community.users(users_username, users_firstname, users_surname, users_regemail, users_pubemail, users_ghlink, users_fbLink)
+INSERT INTO community.users(users_username, users_forename, users_surname, users_regemail, users_pubemail, users_ghlink, users_fbLink)
     VALUES ('MatthewPoletin', 'Matthew', 'Poletin', 'poletinm@yandex.ru', 'contact@matthewpoletin.ru', 'github.com/matthewpoletin', 'fb.me/matthewpoletin');
-INSERT INTO community.users(users_username, users_firstname, users_surname, users_regemail, users_pubemail, users_ghlink, users_fbLink)
+INSERT INTO community.users(users_username, users_forename, users_surname, users_regemail, users_pubemail, users_ghlink, users_fbLink)
     VALUES ('kormvina', 'Ksenia', 'Strogina', 'ksyshkazaglushka@mail.ru', 'stroginakp@student.bmstu.ru', 'github.com/kormvina', 'fb.me/kseniastrogina');
-INSERT INTO community.users(users_username, users_firstname, users_surname, users_regemail, users_pubemail, users_ghlink, users_fbLink)
+INSERT INTO community.users(users_username, users_forename, users_surname, users_regemail, users_pubemail, users_ghlink, users_fbLink)
 	VALUES ('molros', 'Ogneslav', 'Pestritski', 'persicor@gmail.com', 'persicor@gmail.com', 'github.com/persicor', 'fb.me/persicor');
-INSERT INTO community.users(users_username, users_firstname, users_surname, users_regemail, users_pubemail, users_ghlink, users_fbLink)
+INSERT INTO community.users(users_username, users_forename, users_surname, users_regemail, users_pubemail, users_ghlink, users_fbLink)
 	VALUES ('sworen', 'Isaac', 'Grey', 'persicor@gmail.com', 'persicor@gmail.com', 'github.com/isaac_grey', 'fb.me/isaacg');
 
 INSERT INTO community.organizations(organizations_name, organizations_description, organizations_pubemail, organizations_website, organizations_owner_id)

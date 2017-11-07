@@ -34,10 +34,10 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	@Transactional
-	public User create(UserRequest userRequest) {
+	public User createUser(UserRequest userRequest) {
 		User user = new User()
 			.setUsername(userRequest.getUsername())
-			.setFirstname(userRequest.getFirstname())
+			.setForename(userRequest.getForename())
 			.setSurname(userRequest.getSurname())
 			.setRegEmail(userRequest.getRegEmail())
 			.setPubEmail(userRequest.getPubEmail())
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public User read(Integer userId) {
+	public User getUserById(Integer userId) {
 		User user = userRepository.findById(userId).get();
 		if (user == null) {
 			throw new EntityNotFoundException("User '{" + userId + "}' not found");
@@ -58,13 +58,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public User update(Integer userId, UserRequest userRequest) {
+	public User updateUser(Integer userId, UserRequest userRequest) {
 		User user = userRepository.findById(userId).get();
 		if (user == null) {
 			throw new EntityNotFoundException("User '{" + userId + "}' not found");
 		}
 		user.setUsername(userRequest.getUsername() != null ? userRequest.getUsername() : user.getUsername());
-		user.setFirstname(userRequest.getFirstname() != null ? userRequest.getFirstname() : user.getFirstname());
+		user.setForename(userRequest.getForename() != null ? userRequest.getForename() : user.getForename());
 		user.setSurname(userRequest.getSurname() != null ? userRequest.getSurname() : user.getSurname());
 		user.setRegEmail(userRequest.getRegEmail() != null ? userRequest.getRegEmail() : user.getRegEmail());
 		user.setPubEmail(userRequest.getPubEmail() != null ? userRequest.getPubEmail() : user.getPubEmail());
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public void delete(Integer userId) {
+	public void deleteUser(Integer userId) {
 		userRepository.deleteById(userId);
 	}
 

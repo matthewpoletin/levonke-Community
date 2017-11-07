@@ -19,9 +19,12 @@ public class User {
 
 	@Column(name = "users_username", unique = true)
 	private String username;
+	
+	@Column(name = "users_password")
+	private String password;
 
-	@Column(name = "users_firstname")
-	private String firstname;
+	@Column(name = "users_forename")
+	private String forename;
 
 	@Column(name = "users_surname")
 	private String surname;

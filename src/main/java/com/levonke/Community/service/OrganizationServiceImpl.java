@@ -69,7 +69,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 		organization.setPubEmail(organizationRequest.getPubEmail() != null ? organizationRequest.getPubEmail() : organization.getPubEmail());
 		organization.setWebsite(organizationRequest.getWebsite() != null ? organizationRequest.getWebsite() : organization.getWebsite());
 		if (organizationRequest.getOwnerId() != null) {
-			User user = userService.read(organizationRequest.getOwnerId());
+			User user = userService.getUserById(organizationRequest.getOwnerId());
 			if (user != null) {
 				organization.setOwner(user);
 			}

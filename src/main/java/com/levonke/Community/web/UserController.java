@@ -38,24 +38,24 @@ public class UserController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(method = RequestMethod.POST)
 	public void createUser(@RequestBody UserRequest userRequest, HttpServletResponse response) {
-		User user = userService.create(userRequest);
+		User user = userService.createUser(userRequest);
 		response.addHeader(HttpHeaders.LOCATION, this.USER_BASE_URI + "/" + user.getId());
 	}
 
 	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
 	public UserResponse getUser(@PathVariable("userId") final Integer userId) {
-		return new UserResponse(userService.read(userId));
+		return new UserResponse(userService.getUserById(userId));
 	}
 
 	@RequestMapping(value = "/{userId}", method = RequestMethod.PATCH)
 	public UserResponse updateUser(@PathVariable("userId") final Integer userId, @RequestBody UserRequest userRequest) {
-		return new UserResponse(userService.update(userId, userRequest));
+		return new UserResponse(userService.updateUser(userId, userRequest));
 	}
 
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
 	public void deleteUser(@PathVariable("userId") final Integer userId) {
-		userService.delete(userId);
+		userService.deleteUser(userId);
 	}
 
 }

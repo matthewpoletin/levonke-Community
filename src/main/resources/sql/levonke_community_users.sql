@@ -2,7 +2,7 @@ CREATE TABLE community.users
 (
     users_id integer DEFAULT nextval('community.users_users_id_seq'::regclass) PRIMARY KEY NOT NULL,
     users_fblink varchar(255),
-    users_firstname varchar(255),
+    users_forename varchar(255),
     users_ghlink varchar(255),
     users_pubemail varchar(255),
     users_regemail varchar(255),

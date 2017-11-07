@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 public class UserResponse {
 	private Integer id;
 	private String username;
-	private String firstname;
+	private String forename;
 	private String surname;
 	private String regEmail;
 	private String pubEmail;
@@ -19,7 +19,7 @@ public class UserResponse {
 	public UserResponse(User user) {
 		this.id = user.getId();
 		this.username = user.getUsername();
-		this.firstname = user.getFirstname();
+		this.forename = user.getForename();
 		this.surname = user.getSurname();
 		this.regEmail = user.getRegEmail();
 		this.pubEmail = user.getPubEmail();

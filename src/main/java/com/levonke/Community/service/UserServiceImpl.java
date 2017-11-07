@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional(readOnly = true)
 	public User read(Integer userId) {
-		User user = userRepository.findOne(userId);
+		User user = userRepository.findById(userId).get();
 		if (user == null) {
 			throw new EntityNotFoundException("User '{" + userId + "}' not found");
 		}
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public User update(Integer userId, UserRequest userRequest) {
-		User user = userRepository.findOne(userId);
+		User user = userRepository.findById(userId).get();
 		if (user == null) {
 			throw new EntityNotFoundException("User '{" + userId + "}' not found");
 		}
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public void delete(Integer userId) {
-		userRepository.delete(userId);
+		userRepository.deleteById(userId);
 	}
 
 }

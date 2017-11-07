@@ -45,7 +45,7 @@ public class TeamServiceImpl implements TeamService {
 	@Override
 	@Transactional(readOnly = true)
 	public Team read(Integer teamId) {
-		Team team = teamRepository.findOne(teamId);
+		Team team = teamRepository.findById(teamId).get();
 		if (team == null) {
 			throw new EntityNotFoundException("Team '{" + teamId + "}' not found");
 		}
@@ -55,7 +55,7 @@ public class TeamServiceImpl implements TeamService {
 	@Override
 	@Transactional
 	public Team update(Integer teamId, TeamRequest teamRequest) {
-		Team team = teamRepository.findOne(teamId);
+		Team team = teamRepository.findById(teamId).get();
 		if (team == null) {
 			throw new EntityNotFoundException("Team '{" + teamId + "}' not found");
 		}
@@ -67,7 +67,7 @@ public class TeamServiceImpl implements TeamService {
 	@Override
 	@Transactional
 	public void delete(Integer teamId) {
-		teamRepository.delete(teamId);
+		teamRepository.deleteById(teamId);
 	}
 
 }

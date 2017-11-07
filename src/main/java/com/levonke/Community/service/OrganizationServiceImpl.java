@@ -50,7 +50,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 	@Override
 	@Transactional(readOnly = true)
 	public Organization read(Integer organizationId) {
-		Organization organization = organizationRepository.findOne(organizationId);
+		Organization organization = organizationRepository.findById(organizationId).get();
 		if (organization == null) {
 			throw new EntityNotFoundException("Organization '{" + organizationId + "}' not found");
 		}
@@ -60,7 +60,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 	@Override
 	@Transactional
 	public Organization update(Integer organizationId, OrganizationRequest organizationRequest) {
-		Organization organization = organizationRepository.findOne(organizationId);
+		Organization organization = organizationRepository.findById(organizationId).get();
 		if (organization == null) {
 			throw new EntityNotFoundException("Organization '{" + organizationId + "}' not found");
 		}
@@ -79,7 +79,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
 	@Override
 	public void delete(Integer organizationId) {
-		organizationRepository.delete(organizationId);
+		organizationRepository.deleteById(organizationId);
 	}
 
 }

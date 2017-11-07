@@ -22,7 +22,7 @@ public class Team {
 	private String name;
 
 	@JsonIgnore
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "teams_organization_id")
 	private Organization organization;
 	

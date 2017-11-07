@@ -3,13 +3,11 @@ buildscript {
         springBootVersion ='2.0.0.M6'
         lombokVersion = '1.16.18'
         junitVersion = '5.0.1'
-        postgresDriverVersion = '9.4.1211.jre7'
     }
     repositories {
         mavenCentral()
         maven { url "https://repo.spring.io/snapshot" }
         maven { url "https://repo.spring.io/milestone" }
-//        jcenter()
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -22,7 +20,6 @@ repositories {
     mavenCentral()
     maven { url "https://repo.spring.io/snapshot" }
     maven { url "https://repo.spring.io/milestone" }
-    jcenter()
 }
 
 apply plugin: 'java'
@@ -56,6 +53,9 @@ dependencies {
     runtime("org.postgresql:postgresql")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
+
+    // To avoid compiler warnings about @API annotations in JUnit code.
+    compile("org.apiguardian:apiguardian-api:1.0.0")
 
     testCompile("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")

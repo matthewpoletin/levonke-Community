@@ -2,8 +2,10 @@ package com.levonke.Community.web.model;
 
 import com.levonke.Community.domain.Organization;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString
 public class OrganizationResponse {
 	Integer id;
 	String name;

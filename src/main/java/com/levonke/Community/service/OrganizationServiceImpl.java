@@ -33,7 +33,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 		if (size == null) {
 			size = 25;
 		}
-		return organizationRepository.findAll(new PageRequest(page, size)).getContent();
+		return organizationRepository.findAll(PageRequest.of(page, size)).getContent();
 	}
 
 	@Override

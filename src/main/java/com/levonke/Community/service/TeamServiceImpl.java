@@ -29,7 +29,7 @@ public class TeamServiceImpl implements TeamService {
 		if (size == null) {
 			size = 25;
 		}
-		return teamRepository.findAll(new PageRequest(page, size)).getContent();
+		return teamRepository.findAll(PageRequest.of(page, size)).getContent();
 	}
 
 	@Override

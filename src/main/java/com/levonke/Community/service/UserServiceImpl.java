@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 		if (size == null) {
 			size = 25;
 		}
-		return userRepository.findAll(new PageRequest(page, size)).getContent();
+		return userRepository.findAll(PageRequest.of(page, size)).getContent();
 	}
 	
 	@Override

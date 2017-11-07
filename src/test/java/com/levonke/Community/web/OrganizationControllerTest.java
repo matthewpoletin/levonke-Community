@@ -1,30 +1,27 @@
 package com.levonke.Community.web;
 
-import com.levonke.Community.Application;
 import com.levonke.Community.domain.Organization;
 import com.levonke.Community.domain.User;
 import com.levonke.Community.repository.OrganizationRepository;
-import com.levonke.Community.service.UserService;
+import com.levonke.Community.service.OrganizationServiceImpl;
 import com.levonke.Community.web.model.OrganizationResponse;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import java.util.Optional;
 
-@RunWith(SpringRunner.class)
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(/*classes = Application.class, */webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DisplayName("OrganizationController Test")
 public class OrganizationControllerTest {
 	
@@ -33,8 +30,8 @@ public class OrganizationControllerTest {
 		.setUsername("Username")
 		.setPassword("Password")
 		.setForename("Forename")
-		.setRegEmail("name@server.domain")
 		.setSurname("Surname")
+		.setRegEmail("name@server.domain")
 		.setPubEmail("name@server.domain")
 		.setFbLink("fb.com/username")
 		.setGhLink("github.com/username");
@@ -43,12 +40,15 @@ public class OrganizationControllerTest {
 		.setId(1)
 		.setName("Name")
 		.setDescription("Description")
-		.setPubEmail("Public Email")
-		.setWebsite("website")
+		.setPubEmail("name@server.domain")
+		.setWebsite("example.org")
 		.setOwner(user);
 	
 	@Autowired
 	private TestRestTemplate restTemplate;
+	
+	@InjectMocks
+	private OrganizationServiceImpl organizationService;
 	
 	@MockBean
 	private OrganizationRepository organizationRepositoryMock;

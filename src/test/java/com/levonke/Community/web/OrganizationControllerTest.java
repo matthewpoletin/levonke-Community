@@ -54,7 +54,13 @@ public class OrganizationControllerTest {
 	private OrganizationRepository organizationRepositoryMock;
 	
 	@Test
-	@DisplayName("getOrganization")
+	@DisplayName("Create organization")
+	void createOrganization() {
+	
+	}
+	
+	@Test
+	@DisplayName("Get organization")
 	void getOrganization() {
 		Optional<Organization> organizationOptional = Optional.of(organization);
 
@@ -65,6 +71,20 @@ public class OrganizationControllerTest {
 
 		verify(organizationRepositoryMock, times(1)).findById(1);
 		assertThat("Should return valid organization", actualResponse, equalTo(expectedResponse));
+	}
+	
+	@Test
+	@DisplayName("Update organization")
+	void updateOrganization() {
+	
+	}
+	
+	@Test
+	@DisplayName("Delete organization")
+	void deleteOrganization() {
+		restTemplate.delete("/api/community/organizations/1");
+		
+		verify(organizationRepositoryMock, times(1)).deleteById(1);
 	}
 	
 }

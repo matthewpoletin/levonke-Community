@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
 	public User createUser(UserRequest userRequest) {
 		User user = new User()
 			.setUsername(userRequest.getUsername())
+			.setPassword(userRequest.getPassword())
 			.setForename(userRequest.getForename())
 			.setSurname(userRequest.getSurname())
 			.setRegEmail(userRequest.getRegEmail())
@@ -64,6 +65,7 @@ public class UserServiceImpl implements UserService {
 			throw new EntityNotFoundException("User '{" + userId + "}' not found");
 		}
 		user.setUsername(userRequest.getUsername() != null ? userRequest.getUsername() : user.getUsername());
+		user.setPassword(userRequest.getPassword() != null ? userRequest.getPassword() : user.getPassword());
 		user.setForename(userRequest.getForename() != null ? userRequest.getForename() : user.getForename());
 		user.setSurname(userRequest.getSurname() != null ? userRequest.getSurname() : user.getSurname());
 		user.setRegEmail(userRequest.getRegEmail() != null ? userRequest.getRegEmail() : user.getRegEmail());

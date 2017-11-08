@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class UserRequest {
 	private String username;
+	private String password;
 	private String forename;
 	private String surname;
 	private String regEmail;

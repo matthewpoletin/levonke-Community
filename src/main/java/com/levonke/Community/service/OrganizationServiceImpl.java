@@ -17,13 +17,13 @@ public class OrganizationServiceImpl implements OrganizationService {
 
 	private final OrganizationRepository organizationRepository;
 	private final UserServiceImpl userService;
-
+	
 	@Autowired
 	public OrganizationServiceImpl(OrganizationRepository organizationRepository, UserServiceImpl userService) {
 		this.organizationRepository = organizationRepository;
 		this.userService = userService;
 	}
-
+	
 	@Override
 	@Transactional(readOnly = true)
 	public List<Organization> getOrganizations(Integer page, Integer size) {
@@ -35,10 +35,10 @@ public class OrganizationServiceImpl implements OrganizationService {
 		}
 		return organizationRepository.findAll(PageRequest.of(page, size)).getContent();
 	}
-
+	
 	@Override
 	@Transactional
-	public Organization create(OrganizationRequest organizationRequest) {
+	public Organization createOrganization(OrganizationRequest organizationRequest) {
 		Organization organization = new Organization()
 			.setName(organizationRequest.getName())
 			.setDescription(organizationRequest.getDescription())
@@ -46,40 +46,39 @@ public class OrganizationServiceImpl implements OrganizationService {
 			.setWebsite(organizationRequest.getWebsite());
 		return organizationRepository.save(organization);
 	}
-
+	
 	@Override
 	@Transactional(readOnly = true)
-	public Organization read(Integer organizationId) {
-		Organization organization = organizationRepository.findById(organizationId).get();
-		if (organization == null) {
-			throw new EntityNotFoundException("Organization '{" + organizationId + "}' not found");
-		}
-		return organization;
+	public Organization getOrganizationById(Integer organizationId) {
+		return organizationRepository.findById(organizationId)
+			.orElseThrow(() -> new EntityNotFoundException("Organization '{" + organizationId + "}' not found"));
 	}
-
+	
 	@Override
 	@Transactional
-	public Organization update(Integer organizationId, OrganizationRequest organizationRequest) {
-		Organization organization = organizationRepository.findById(organizationId).get();
-		if (organization == null) {
-			throw new EntityNotFoundException("Organization '{" + organizationId + "}' not found");
-		}
+	public Organization updateOrganizationById(Integer organizationId, OrganizationRequest organizationRequest) {
+		Organization organization = this.getOrganizationById(organizationId);
 		organization.setName(organizationRequest.getName() != null ? organizationRequest.getName() : organization.getName());
 		organization.setDescription(organizationRequest.getDescription() != null ? organizationRequest.getDescription() : organization.getDescription());
 		organization.setPubEmail(organizationRequest.getPubEmail() != null ? organizationRequest.getPubEmail() : organization.getPubEmail());
 		organization.setWebsite(organizationRequest.getWebsite() != null ? organizationRequest.getWebsite() : organization.getWebsite());
-		if (organizationRequest.getOwnerId() != null) {
-			User user = userService.getUserById(organizationRequest.getOwnerId());
-			if (user != null) {
-				organization.setOwner(user);
-			}
-		}
+		this.setOwnerToOrganization(organizationId, organizationRequest.getOwnerId());
 		return organizationRepository.save(organization);
 	}
-
+	
 	@Override
-	public void delete(Integer organizationId) {
+	@Transactional
+	public void deleteOrganizationById(Integer organizationId) {
 		organizationRepository.deleteById(organizationId);
 	}
-
+	
+	@Override
+	@Transactional
+	public void setOwnerToOrganization(Integer organizationId, Integer userId) {
+		Organization organization = this.getOrganizationById(organizationId);
+		User user = userService.getUserById(userId);
+		organization.setOwner(user);
+		organizationRepository.save(organization);
+	}
+	
 }

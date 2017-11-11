@@ -7,8 +7,14 @@ import java.util.List;
 
 public interface TeamService {
 	List<Team> getTeams(Integer size, Integer page);
-	Team create(TeamRequest teamRequest);
-	Team read(Integer teamId);
-	Team update(Integer teamId, TeamRequest teamRequest);
-	void delete(Integer teamId);
+	Team createTeam(TeamRequest teamRequest);
+	Team getTeamById(Integer teamId);
+	Team updateUserById(Integer teamId, TeamRequest teamRequest);
+	void deleteTeamById(Integer teamId);
+	
+	void setOrganizationForTeam(Integer teamId, Integer organizationId);
+	
+	List<Integer> getUsers(Integer teamId);
+	void addUser(Integer teamId, Integer userId);
+	void removeUser(Integer teamId, Integer userId);
 }

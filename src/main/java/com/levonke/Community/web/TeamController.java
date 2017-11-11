@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(TeamController.TEAM_BASE_URI)
+@RequestMapping(TeamController.teamBaseURI)
 public class TeamController {
 
-	public static final String TEAM_BASE_URI = "/api/community/teams";
+	static final String teamBaseURI = "/api/community/teams";
 
 	private TeamServiceImpl teamService;
 
@@ -36,25 +36,49 @@ public class TeamController {
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(method = RequestMethod.POST)
-	public void createTeam(@RequestBody TeamRequest teamRequest, HttpServletResponse response) {
-		Team team = teamService.create(teamRequest);
-		response.addHeader(HttpHeaders.LOCATION, this.TEAM_BASE_URI + "/" + team.getId());
+	public TeamResponse createTeam(@RequestBody TeamRequest teamRequest, HttpServletResponse response) {
+		Team team = teamService.createTeam(teamRequest);
+		response.addHeader(HttpHeaders.LOCATION, teamBaseURI + "/" + team.getId());
+		return new TeamResponse(team);
 	}
 
 	@RequestMapping(value = "/{teamId}", method = RequestMethod.GET)
 	public TeamResponse getTeam(@PathVariable("teamId") final Integer teamId) {
-		return new TeamResponse(teamService.read(teamId));
+		return new TeamResponse(teamService.getTeamById(teamId));
 	}
 
 	@RequestMapping(value = "/{teamId}", method = RequestMethod.PATCH)
 	public TeamResponse updateTeam(@PathVariable("teamId") final Integer teamId, @RequestBody TeamRequest teamRequest) {
-		return new TeamResponse(teamService.update(teamId, teamRequest));
+		return new TeamResponse(teamService.updateUserById(teamId, teamRequest));
 	}
 
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@RequestMapping(value = "/{teamId}", method = RequestMethod.DELETE)
 	public void deleteTeam(@PathVariable("teamId") final Integer teamId) {
-		teamService.delete(teamId);
+		teamService.deleteTeamById(teamId);
+	}
+	
+	@ResponseStatus(HttpStatus.CREATED)
+	@RequestMapping(value = "/{teamId}/organization/{organizationId}", method = RequestMethod.POST)
+	public void setOrganization(@PathVariable("teamId") final Integer teamId, @PathVariable("organizationId") final Integer organizationId) {
+		teamService.setOrganizationForTeam(teamId, organizationId);
+	}
+	
+	@RequestMapping(value = "/{teamId}/users", method = RequestMethod.GET)
+	public List<Integer> getUsersOfTeam(@PathVariable("teamId") final Integer teamId) {
+		return teamService.getUsers(teamId);
+	}
+	
+	@ResponseStatus(HttpStatus.CREATED)
+	@RequestMapping(value = "/{teamId}/users/{userId}", method = RequestMethod.POST)
+	public void addUserToTeam(@PathVariable("teamId") final Integer teamId, @PathVariable("userId") final Integer userId) {
+		teamService.addUser(teamId, userId);
+	}
+	
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@RequestMapping(value = "/{teamId}/users/{userId}", method = RequestMethod.DELETE)
+	public void removeUserFromTeam(@PathVariable("teamId") final Integer teamId, @PathVariable("userId") final Integer userId) {
+		teamService.removeUser(teamId, userId);
 	}
 
 }

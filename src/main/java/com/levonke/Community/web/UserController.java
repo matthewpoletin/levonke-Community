@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(UserController.USER_BASE_URI)
+@RequestMapping(UserController.userBaseURI)
 public class UserController {
 
-	public static final String USER_BASE_URI = "/api/community/users";
+	static final String userBaseURI = "/api/community/users";
 
 	private final UserServiceImpl userService;
 	
@@ -34,12 +34,12 @@ public class UserController {
 			.collect(Collectors.toList());
 	}
 
-	// TODO: add check for existing username (or leave UNIQUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(method = RequestMethod.POST)
-	public void createUser(@RequestBody UserRequest userRequest, HttpServletResponse response) {
+	public UserResponse createUser(@RequestBody UserRequest userRequest, HttpServletResponse response) {
 		User user = userService.createUser(userRequest);
-		response.addHeader(HttpHeaders.LOCATION, this.USER_BASE_URI + "/" + user.getId());
+		response.addHeader(HttpHeaders.LOCATION, userBaseURI + "/" + user.getId());
+		return new UserResponse(user);
 	}
 
 	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
@@ -49,13 +49,13 @@ public class UserController {
 
 	@RequestMapping(value = "/{userId}", method = RequestMethod.PATCH)
 	public UserResponse updateUser(@PathVariable("userId") final Integer userId, @RequestBody UserRequest userRequest) {
-		return new UserResponse(userService.updateUser(userId, userRequest));
+		return new UserResponse(userService.updateUserById(userId, userRequest));
 	}
 
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
 	public void deleteUser(@PathVariable("userId") final Integer userId) {
-		userService.deleteUser(userId);
+		userService.deleteUserById(userId);
 	}
 
 }

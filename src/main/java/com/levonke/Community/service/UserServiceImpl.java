@@ -9,13 +9,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 	
 	private final UserRepository userRepository;
-
+	
 	@Autowired
 	public UserServiceImpl(UserRepository userRepository) {
 		this.userRepository = userRepository;
@@ -46,24 +47,18 @@ public class UserServiceImpl implements UserService {
 			.setGhLink(userRequest.getGhLink());
 		return userRepository.save(user);
 	}
-
+	
 	@Override
 	@Transactional(readOnly = true)
 	public User getUserById(Integer userId) {
-		User user = userRepository.findById(userId).get();
-		if (user == null) {
-			throw new EntityNotFoundException("User '{" + userId + "}' not found");
-		}
-		return user;
+		return userRepository.findById(userId)
+			.orElseThrow(() -> new EntityNotFoundException("User '{" + userId + "}' not found"));
 	}
-
+	
 	@Override
 	@Transactional
-	public User updateUser(Integer userId, UserRequest userRequest) {
-		User user = userRepository.findById(userId).get();
-		if (user == null) {
-			throw new EntityNotFoundException("User '{" + userId + "}' not found");
-		}
+	public User updateUserById(Integer userId, UserRequest userRequest) {
+		User user = this.getUserById(userId);
 		user.setUsername(userRequest.getUsername() != null ? userRequest.getUsername() : user.getUsername());
 		user.setPassword(userRequest.getPassword() != null ? userRequest.getPassword() : user.getPassword());
 		user.setForename(userRequest.getForename() != null ? userRequest.getForename() : user.getForename());
@@ -74,11 +69,19 @@ public class UserServiceImpl implements UserService {
 		user.setGhLink(userRequest.getGhLink() != null ? userRequest.getGhLink() : user.getGhLink());
 		return userRepository.save(user);
 	}
-
+	
 	@Override
 	@Transactional
-	public void deleteUser(Integer userId) {
+	public void deleteUserById(Integer userId) {
 		userRepository.deleteById(userId);
 	}
-
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Integer> getTeamsOfUser(Integer userId) {
+		List<Integer> teamsId = new ArrayList<>();
+		this.getUserById(userId).getTeams().forEach(team -> teamsId.add(team.getId()));
+		return teamsId;
+	}
+	
 }

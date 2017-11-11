@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(OrganizationController.ORGANIZATION_BASE_URI)
+@RequestMapping(OrganizationController.organizationBaseURI)
 public class OrganizationController {
 	
-	public static final String ORGANIZATION_BASE_URI = "/api/community/organizations";
-
+	static final String organizationBaseURI = "/api/community/organizations";
+	
 	private OrganizationServiceImpl organizationService;
 	
 	@Autowired
@@ -33,27 +33,34 @@ public class OrganizationController {
 			.map(OrganizationResponse::new)
 			.collect(Collectors.toList());
 	}
-
+	
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(method = RequestMethod.POST)
-	public  void createOrganization(@RequestBody OrganizationRequest organizationRequest, HttpServletResponse response) {
-		Organization organization = organizationService.create(organizationRequest);
-		response.addHeader(HttpHeaders.LOCATION, this.ORGANIZATION_BASE_URI + "/" + organization.getId());
+	public OrganizationResponse createOrganization(@RequestBody OrganizationRequest organizationRequest, HttpServletResponse response) {
+		Organization organization = organizationService.createOrganization(organizationRequest);
+		response.addHeader(HttpHeaders.LOCATION, organizationBaseURI + "/" + organization.getId());
+		return new OrganizationResponse(organization);
 	}
-
+	
 	@RequestMapping(value = "/{organizationId}", method = RequestMethod.GET)
 	public OrganizationResponse getOrganization(@PathVariable("organizationId") final Integer organizationId) {
-		return new OrganizationResponse(organizationService.read(organizationId));
+		return new OrganizationResponse(organizationService.getOrganizationById(organizationId));
 	}
-
+	
 	@RequestMapping(value = "/{organizationId}", method = RequestMethod.PATCH)
 	public OrganizationResponse update(@PathVariable("organizationId") final Integer organizationId, @RequestBody OrganizationRequest organizationRequest) {
-		return new OrganizationResponse(organizationService.update(organizationId, organizationRequest));
+		return new OrganizationResponse(organizationService.updateOrganizationById(organizationId, organizationRequest));
 	}
-
+	
 	@RequestMapping(value = "/{organizationId}", method = RequestMethod.DELETE)
 	public void deleteOrganization(@PathVariable("organizationId") final Integer organizationId) {
-		organizationService.delete(organizationId);
+		organizationService.deleteOrganizationById(organizationId);
 	}
-
+	
+	@ResponseStatus(HttpStatus.CREATED)
+	@RequestMapping(value = "/{organizationId}/owner/{userId}", method = RequestMethod.POST)
+	public void setOwnerToOrganization(@PathVariable("organizationId") final Integer organizationId, @PathVariable("userId") final Integer userId) {
+		organizationService.setOwnerToOrganization(organizationId, userId);
+	}
+	
 }

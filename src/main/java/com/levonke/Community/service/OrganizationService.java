@@ -7,8 +7,10 @@ import java.util.List;
 
 public interface OrganizationService {
 	List<Organization> getOrganizations(Integer page, Integer size);
-	Organization create(OrganizationRequest organizationRequest);
-	Organization read(Integer organizationId);
-	Organization update(Integer organizationId, OrganizationRequest organizationRequest);
-	void delete(Integer organizationId);
+	Organization createOrganization(OrganizationRequest organizationRequest);
+	Organization getOrganizationById(Integer organizationId);
+	Organization updateOrganizationById(Integer organizationId, OrganizationRequest organizationRequest);
+	void deleteOrganizationById(Integer organizationId);
+	
+	void setOwnerToOrganization(Integer organizationId, Integer userId);
 }

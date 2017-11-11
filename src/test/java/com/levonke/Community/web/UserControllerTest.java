@@ -25,7 +25,7 @@ import java.util.Optional;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DisplayName("UserController Test")
-public class UserControllerTest {
+class UserControllerTest {
 	
 	private final User user = new User()
 		.setId(1)
@@ -78,8 +78,7 @@ public class UserControllerTest {
 		UserResponse actualResponse = restTemplate.postForObject("/api/community/users", userRequest, UserResponse.class);
 
 		verify(userRepositoryMock, times(1)).save(userNoId);
-		assertEquals("Invalid user response", expectedResponse, actualResponse);
-//		assertThat("Should return valid user", actualResponse, equalTo(expectedResponse));
+		assertThat("Invalid user response", expectedResponse, equalTo(actualResponse));
 	}
 	
 	@Test

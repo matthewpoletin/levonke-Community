@@ -4,6 +4,8 @@ import com.levonke.Community.domain.Organization;
 import com.levonke.Community.domain.User;
 import com.levonke.Community.repository.OrganizationRepository;
 import com.levonke.Community.service.OrganizationServiceImpl;
+import com.levonke.Community.service.UserService;
+import com.levonke.Community.web.model.OrganizationRequest;
 import com.levonke.Community.web.model.OrganizationResponse;
 
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +25,7 @@ import java.util.Optional;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DisplayName("OrganizationController Test")
-public class OrganizationControllerTest {
+class OrganizationControllerTest {
 	
 	private final User user = new User()
 		.setId(1)
@@ -53,10 +55,35 @@ public class OrganizationControllerTest {
 	@MockBean
 	private OrganizationRepository organizationRepositoryMock;
 	
+	@MockBean
+	private UserService userServiceMock;
+	
 	@Test
 	@DisplayName("Create organization")
 	void createOrganization() {
-	
+		Organization organizationNoId = new Organization()
+			.setName("Name")
+			.setDescription("Description")
+			.setPubEmail("name@server.domain")
+			.setWebsite("example.org")
+			.setOwner(user);
+		
+		when(userServiceMock.getUserById(1)).thenReturn(user);
+		when(organizationRepositoryMock.save(organizationNoId)).thenReturn(organization);
+		
+		OrganizationRequest organizationRequest = new OrganizationRequest()
+			.setName("Name")
+			.setDescription("Description")
+			.setPubEmail("name@server.domain")
+			.setWebsite("example.org")
+			.setOwnerId(1);
+		
+		OrganizationResponse expectedResponse = new OrganizationResponse(organization);
+		OrganizationResponse actualResponse = restTemplate.postForObject("/api/community/organizations", organizationRequest, OrganizationResponse.class);
+
+		verify(userServiceMock, times(1)).getUserById(1);
+		verify(organizationRepositoryMock, times(1)).save(organizationNoId);
+		assertEquals("Invalid organization response", expectedResponse, actualResponse);
 	}
 	
 	@Test

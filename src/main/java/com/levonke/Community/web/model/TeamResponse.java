@@ -18,7 +18,7 @@ public class TeamResponse {
 	public TeamResponse(Team team) {
 		this.id = team.getId();
 		this.name = team.getName();
-		this.organizationId = team.getOrganization().getId();
+		this.organizationId = team.getOrganization() != null ? team.getOrganization().getId() : null;
 		team.getUsers().forEach(user -> this.usersId.add(user.getId()));
 	}
 }

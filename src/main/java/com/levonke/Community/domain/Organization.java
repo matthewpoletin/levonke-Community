@@ -18,7 +18,7 @@ public class Organization {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(name = "organizations_name")
+	@Column(name = "organizations_name", unique = true)
 	private String name;
 	
 	@Column(name = "organizations_description")
@@ -30,12 +30,10 @@ public class Organization {
 	@Column(name = "organizations_website")
 	private String website;
 	
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "organizations_owner_id")
 	private User owner;
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
 	private Collection<Team> teams = new ArrayList<>();
 	

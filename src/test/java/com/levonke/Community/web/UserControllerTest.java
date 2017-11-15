@@ -25,6 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 import java.util.ArrayList;
@@ -100,9 +101,10 @@ class UserControllerTest {
 		
 		MvcResult result = this.mockMvc.perform(
 				post(UserController.userBaseURI)
-				.content(new ObjectMapper().writeValueAsString(userRequest))
 				.contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(userRequest))
 				).andExpect(status().isCreated())
+				.andExpect(header().string("Location", "/api/community/users/1"))
 				.andReturn();
 		UserResponse actualResponse = new ObjectMapper().readValue(result.getResponse().getContentAsString(), new TypeReference<UserResponse>() {
 		});
@@ -135,6 +137,23 @@ class UserControllerTest {
 	@Test
 	@DisplayName("Update user")
 	void updateUser() throws Exception {
+		// Arrange
+		UserRequest userRequest = new UserRequest()
+			.setForename("Forename")
+			.setSurname("Surname")
+			.setPassword("Password")
+			.setFbLink("fb.me/nickname");
+		
+		// Act
+		this.mockMvc.perform(
+				patch(UserController.userBaseURI + "/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(userRequest)))
+				.andExpect(status().isOk());
+		
+		// Assert
+		verify(userService, times(1))
+			.updateUserById(1, userRequest);
 	}
 	
 	@Test

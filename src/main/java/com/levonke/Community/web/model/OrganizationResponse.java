@@ -2,6 +2,7 @@ package com.levonke.Community.web.model;
 
 import com.levonke.Community.domain.Organization;
 
+import com.levonke.Community.domain.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,6 @@ public class OrganizationResponse {
 		this.description = organization.getName();
 		this.pubEmail = organization.getPubEmail();
 		this.website = organization.getWebsite();
-		this.ownerId = organization.getOwner().getId();
+		this.ownerId = organization.getOwner() != null ? organization.getOwner().getId() : null;
 	}
 }

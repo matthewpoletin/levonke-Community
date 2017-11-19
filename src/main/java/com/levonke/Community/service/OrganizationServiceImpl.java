@@ -5,6 +5,7 @@ import com.levonke.Community.web.model.OrganizationRequest;
 import com.levonke.Community.domain.Organization;
 import com.levonke.Community.repository.OrganizationRepository;
 
+import com.levonke.Community.web.model.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -80,6 +81,13 @@ public class OrganizationServiceImpl implements OrganizationService {
 		User user = userService.getUserById(userId);
 		organization.setOwner(user);
 		organizationRepository.save(organization);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public User getOwnerOfOrganization(Integer organizationId) {
+		Organization organization = this.getOrganizationById(organizationId);
+		return userService.getUserById(organization.getId());
 	}
 	
 }

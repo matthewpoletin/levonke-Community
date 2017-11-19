@@ -5,6 +5,7 @@ import com.levonke.Community.service.OrganizationServiceImpl;
 import com.levonke.Community.web.model.OrganizationRequest;
 import com.levonke.Community.web.model.OrganizationResponse;
 
+import com.levonke.Community.web.model.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -61,6 +62,11 @@ public class OrganizationController {
 	@RequestMapping(value = "/{organizationId}/owner/{userId}", method = RequestMethod.POST)
 	public void setOwnerToOrganization(@PathVariable("organizationId") final Integer organizationId, @PathVariable("userId") final Integer userId) {
 		organizationService.setOwnerToOrganization(organizationId, userId);
+	}
+	
+	@RequestMapping(value = "/{organizationId}/owner", method = RequestMethod.GET)
+	public UserResponse getOwnerOfOrganization(@PathVariable("organizationId") final Integer organizationId) {
+		return new UserResponse(organizationService.getOwnerOfOrganization(organizationId));
 	}
 	
 }

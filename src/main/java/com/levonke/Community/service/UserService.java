@@ -2,6 +2,8 @@ package com.levonke.Community.service;
 
 import com.levonke.Community.domain.User;
 import com.levonke.Community.web.model.UserRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 

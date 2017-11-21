@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -77,24 +78,31 @@ class UserControllerTest {
 			add(user);
 		}};
 		
-		when(userRepositoryMock.findAll()).thenReturn(users);
+		PageRequest pr = PageRequest.of(0, 25);
+		PageImpl<User> clientPage = new PageImpl<>(users, pr, 100);
+		
+		when(userRepositoryMock.findAll(any(Pageable.class))).thenReturn(clientPage);
 		
 		List<UserResponse> expectedResponse = users
-				.stream()
-				.map(UserResponse::new)
-				.collect(Collectors.toList());
+			.stream()
+			.map(UserResponse::new)
+			.collect(Collectors.toList());
 		
 		// Act
 		MvcResult result = this.mockMvc.perform(
-				get(UserController.userBaseURI + "/users"/* + "?page=0&size=25"*/).param("page", "0").param("size", "25"))
-				.andExpect(status().isOk())
-				.andExpect(content().contentType("application/json"))
-				.andExpect(jsonPath("$[0].id").exists())
-				.andReturn();
+			get(UserController.userBaseURI + "/users")
+				.param("page", "0")
+				.param("size", "25")
+			)
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+			.andExpect(jsonPath("$[0].id").exists())
+			.andReturn();
+		
+		List<UserResponse> actualResponse = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<UserResponse>>() { });
 		
 		// Assert
-		UserResponse actualResponse = new ObjectMapper().readValue(result.getResponse().getContentAsString(), new TypeReference<List<UserResponse>>() { });
-		assertEquals("Invalid car response", expectedResponse, actualResponse);
+		assertEquals("Invalid user response", expectedResponse, actualResponse);
 	}
 	
 	@Test
@@ -102,40 +110,39 @@ class UserControllerTest {
 	void createUser() throws Exception {
 		// Arrange
 		User userNoId = new User()
-				.setUsername("Username")
-				.setPassword("Password")
-				.setForename("Forename")
-				.setSurname("Surname")
-				.setRegEmail("name@server.domain")
-				.setPubEmail("name@server.domain")
-				.setFbLink("fb.com/username")
-				.setGhLink("github.com/username")
-				.setOrganizations(new ArrayList<>())
-				.setTeams(new ArrayList<>());
+			.setUsername("Username")
+			.setPassword("Password")
+			.setForename("Forename")
+			.setSurname("Surname")
+			.setRegEmail("name@server.domain")
+			.setPubEmail("name@server.domain")
+			.setFbLink("fb.com/username")
+			.setGhLink("github.com/username");
 		
 		when(userRepositoryMock.save(userNoId)).thenReturn(user);
 		
 		UserRequest userRequest = new UserRequest()
-				.setUsername("Username")
-				.setPassword("Password")
-				.setForename("Forename")
-				.setSurname("Surname")
-				.setRegEmail("name@server.domain")
-				.setPubEmail("name@server.domain")
-				.setFbLink("fb.com/username")
-				.setGhLink("github.com/username");
+			.setUsername("Username")
+			.setPassword("Password")
+			.setForename("Forename")
+			.setSurname("Surname")
+			.setRegEmail("name@server.domain")
+			.setPubEmail("name@server.domain")
+			.setFbLink("fb.com/username")
+			.setGhLink("github.com/username");
 		
 		UserResponse expectedResponse = new UserResponse(user);
 		
 		// Act
 		MvcResult result = this.mockMvc.perform(
-				post(UserController.userBaseURI + "/users")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(userRequest))
-				).andExpect(status().isCreated())
-				.andExpect(header().string("Location", UserController.userBaseURI + "/users" + "/1"))
-				.andReturn();
-		UserResponse actualResponse = new ObjectMapper().readValue(result.getResponse().getContentAsString(), new TypeReference<UserResponse>() { });
+			post(UserController.userBaseURI + "/users")
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(objectMapper.writeValueAsString(userRequest))
+			)
+			.andExpect(status().isCreated())
+			.andExpect(header().string("Location", UserController.userBaseURI + "/users" + "/1"))
+			.andReturn();
+		UserResponse actualResponse = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<UserResponse>() { });
 		
 		// Assert
 		verify(userRepositoryMock, times(1)).save(userNoId);
@@ -153,13 +160,13 @@ class UserControllerTest {
 		// Act
 		MvcResult result = this.mockMvc.perform(
 			get(UserController.userBaseURI + "/users" + "/1"))
-			.andExpect(status().is2xxSuccessful()
-			).andReturn();
+			.andExpect(status().is2xxSuccessful())
+			.andReturn();
 		
 		UserResponse expectedResponse = new UserResponse(user);
 		UserResponse actualResponse = new ObjectMapper().readValue(result.getResponse().getContentAsString(), new TypeReference<UserResponse>() { });
 		
-		// Accert
+		// Assert
 		verify(userRepositoryMock, times(1)).findById(1);
 		assertEquals("Invalid country response", expectedResponse, actualResponse);
 	}
@@ -168,22 +175,44 @@ class UserControllerTest {
 	@DisplayName("Update user")
 	void updateUser() throws Exception {
 		// Arrange
-		UserRequest userRequest = new UserRequest()
+		User userUpdated = new User()
+			.setId(1)
+			.setUsername("USERNAME")
 			.setForename("Forename")
 			.setSurname("Surname")
 			.setPassword("Password")
-			.setFbLink("fb.me/nickname");
+			.setRegEmail("name@server.domain")
+			.setPubEmail("name@server.domain")
+			.setFbLink("fb.me/username")
+			.setGhLink("github.com/username");
+		
+		Optional<User> userOptional = Optional.of(user);
+		
+		when(userRepositoryMock.findById(1)).thenReturn(userOptional);
+		when(userRepositoryMock.save(any(User.class))).thenReturn(userUpdated);
+		
+		UserRequest userRequest = new UserRequest()
+			.setUsername("USERNAME");
 		
 		// Act
-		this.mockMvc.perform(
-				patch(UserController.userBaseURI + "/users" + "/1")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(userRequest)))
-				.andExpect(status().isOk());
+		MvcResult result = this.mockMvc.perform(
+			patch(UserController.userBaseURI + "/users" + "/1")
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(objectMapper.writeValueAsString(userUpdated))
+			)
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+			.andExpect(jsonPath("$.id").exists())
+			.andReturn();
+		
+		UserResponse expectedResponse = new UserResponse(user);
+		expectedResponse.setUsername("USERNAME");
+		UserResponse actualResponse = new ObjectMapper().readValue(result.getResponse().getContentAsString(), new TypeReference<UserResponse>() { });
 		
 		// Assert
-		verify(userService, times(1))
-			.updateUserById(1, userRequest);
+		verify(userRepositoryMock, times(1)).findById(1);
+		verify(userRepositoryMock, times(1)).save(userUpdated);
+		assertEquals("Invalid user response", expectedResponse, actualResponse);
 	}
 	
 	@Test
@@ -191,8 +220,9 @@ class UserControllerTest {
 	void deleteUser() throws Exception {
 		// Act
 		this.mockMvc.perform(
-			delete(UserController.userBaseURI + "/users" + "/1")
-			).andExpect(status().isNoContent());
+				delete(UserController.userBaseURI + "/users" + "/1")
+			)
+			.andExpect(status().isNoContent());
 		
 		// Assert
 		verify(userRepositoryMock, times(1)).deleteById(1);

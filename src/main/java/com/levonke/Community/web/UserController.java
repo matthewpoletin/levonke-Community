@@ -6,6 +6,7 @@ import com.levonke.Community.web.model.UserRequest;
 import com.levonke.Community.web.model.UserResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,8 @@ public class UserController {
 	
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	public List<UserResponse> getUsers(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size) {
-		return userService.getUsers(page, size)
+		Page<User> userPage = userService.getUsers(page, size);
+		return userPage
 			.stream()
 			.map(UserResponse::new)
 			.collect(Collectors.toList());
@@ -38,7 +40,7 @@ public class UserController {
 	@RequestMapping(value = "/users", method = RequestMethod.POST)
 	public UserResponse createUser(@RequestBody UserRequest userRequest, HttpServletResponse response) {
 		User user = userService.createUser(userRequest);
-		response.addHeader(HttpHeaders.LOCATION, userBaseURI + "/" + user.getId());
+		response.addHeader(HttpHeaders.LOCATION, userBaseURI + "/users/" + user.getId());
 		return new UserResponse(user);
 	}
 

@@ -18,10 +18,6 @@ public class UserResponse {
 	private String ghLink;
 	private String fbLink;
 
-	public UserResponse(Integer userId) {
-		this.id = userId;
-	}
-	
 	public UserResponse(User user) {
 		this.id = user.getId();
 		this.username = user.getUsername();

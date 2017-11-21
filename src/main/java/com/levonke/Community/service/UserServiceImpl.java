@@ -5,6 +5,7 @@ import com.levonke.Community.repository.UserRepository;
 import com.levonke.Community.web.model.UserRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,13 +25,13 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	@Transactional(readOnly = true)
-	public List<User> getUsers(Integer page, Integer size) {
+	public Page<User> getUsers(Integer page, Integer size) {
 		if(page == null)
 			page = 0;
 		if (size == null) {
 			size = 25;
 		}
-		return userRepository.findAll(PageRequest.of(page, size)).getContent();
+		return userRepository.findAll(PageRequest.of(page, size));
 	}
 	
 	@Override

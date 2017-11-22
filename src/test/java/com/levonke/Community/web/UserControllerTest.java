@@ -159,7 +159,8 @@ class UserControllerTest {
 		
 		// Act
 		MvcResult result = this.mockMvc.perform(
-			get(UserController.userBaseURI + "/users" + "/1"))
+				get(UserController.userBaseURI + "/users" + "/1")
+			)
 			.andExpect(status().is2xxSuccessful())
 			.andReturn();
 		
@@ -198,7 +199,7 @@ class UserControllerTest {
 		MvcResult result = this.mockMvc.perform(
 			patch(UserController.userBaseURI + "/users" + "/1")
 				.contentType(MediaType.APPLICATION_JSON_UTF8)
-				.content(objectMapper.writeValueAsString(userUpdated))
+				.content(objectMapper.writeValueAsString(userRequest))
 			)
 			.andExpect(status().isOk())
 			.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))

@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,10 +73,12 @@ public class TeamServiceImpl implements TeamService {
 	
 	@Override
 	@Transactional
-	public void setOrganizationForTeam(Integer teamId, Integer organizationId) {
-		Team team = this.getTeamById(teamId);
-		team.setOrganization(organizationService.getOrganizationById(organizationId));
-		teamRepository.save(team);
+	public void setOrganizationForTeam(Integer teamId, @NotNull Integer organizationId) {
+		if (organizationId != null) {
+			Team team = this.getTeamById(teamId);
+			team.setOrganization(organizationService.getOrganizationById(organizationId));
+			teamRepository.save(team);
+		}
 	}
 	
 	@Override

@@ -7,37 +7,43 @@ import com.levonke.Community.repository.TeamRepository;
 import com.levonke.Community.service.OrganizationService;
 import com.levonke.Community.service.TeamServiceImpl;
 import com.levonke.Community.service.UserService;
+import com.levonke.Community.service.UserServiceImpl;
 import com.levonke.Community.web.model.TeamRequest;
 import com.levonke.Community.web.model.TeamResponse;
 
-import com.levonke.Community.web.model.UserRequest;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.data.domain.*;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.context.WebApplicationContext;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.util.AssertionErrors.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import java.util.stream.Collectors;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("TeamController Test")
 class TeamControllerTest {
 	
-	
 	private final User user = new User()
-		.setId(1)
 		.setUsername("Username")
 		.setPassword("Password")
 		.setForename("Forename")
@@ -47,88 +53,182 @@ class TeamControllerTest {
 		.setFbLink("fb.com/username")
 		.setGhLink("github.com/username");
 	
-	// TODO: test with added user
-	private final ArrayList<User> users = new ArrayList<>();
-
-	public TeamControllerTest() {
-		users.add(user);
-	}
-	
 	private final Organization organization = new Organization()
 		.setId(1)
 		.setName("Name")
 		.setDescription("Description")
 		.setPubEmail("name@server.com")
 		.setWebsite("server.com")
-//		.setUsers(ArrayList<User>().add(user))
 		.setOwner(user);
+//		.setTeams(ArrayList<Team>().add(team))
 	
-	private Team team = new Team()
+	private final Team team = new Team()
 		.setId(1)
-		.setName("Name")
-		.setOrganization(organization);
+		.setName("Name");
+//		.setOrganization(organization);
 	
 	@Autowired
-	private TestRestTemplate restTemplate;
-
+	ObjectMapper objectMapper;
+	
+	@Autowired
+	private WebApplicationContext wac;
+	
+	@Autowired
+	private MockMvc mockMvc;
+	
 	@InjectMocks
 	private TeamServiceImpl teamService;
 	
 	@MockBean
 	private TeamRepository teamRepositoryMock;
 	
-	@MockBean
-	private UserService userServiceMock;
+//	@MockBean
+//	private UserService userServiceMock;
+//
+//	@MockBean
+//	private OrganizationService organizationServiceMock;
 	
-	@MockBean
-	private OrganizationService organizationServiceMock;
-	
-	@Test
-	@DisplayName("Create Team")
-	void createTeam() {
-		Team teamNoId = new Team()
-			.setName("Name")
-//			.setUsers(add users)
-			.setOrganization(organization);
-				
-		when(teamRepositoryMock.save(teamNoId)).thenReturn(team);
-		
-		TeamRequest teamRequest = new TeamRequest()
-			.setName("Name")
-			.setOrganizationId(1);
-		
-		TeamResponse expectedResponse = new TeamResponse(team);
-		TeamResponse actualResponse = restTemplate.postForObject("/api/community/teams", teamRequest, TeamResponse.class);
-		
-		verify(teamRepositoryMock, times(1)).save(teamNoId);
-		assertThat("Invalid team response", expectedResponse, equalTo(actualResponse));
+	@BeforeAll
+	void setUpMockMvc(WebApplicationContext wac) {
+		mockMvc = webAppContextSetup(wac)
+			.build();
 	}
 	
 	@Test
-	@DisplayName("Get Team")
-	void getTeam() {
+	@DisplayName("Get teams")
+	void getTeams() throws Exception {
+		// Arrange
+		List<Team> teams= new ArrayList<Team>() {{
+			add(team);
+		}};
+		
+		PageRequest pr = PageRequest.of(0, 25);
+		PageImpl<Team> clientPage = new PageImpl<>(teams, pr, 100);
+		
+		when(teamRepositoryMock.findAll(any(Pageable.class))).thenReturn(clientPage);
+		
+		List<TeamResponse> expectedResponse = teams
+			.stream()
+			.map(TeamResponse::new)
+			.collect(Collectors.toList());
+		
+		// Act
+		MvcResult result = this.mockMvc.perform(
+			get(TeamController.teamBaseURI + "/teams")
+				.param("page", "0")
+				.param("size", "25")
+			)
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+			.andExpect(jsonPath("$[0].id").exists())
+			.andReturn();
+	
+		List<TeamResponse> actualResponse = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<TeamResponse>>() { });
+		
+		// Assert
+		assertEquals("Invalid team response", expectedResponse, actualResponse);
+	}
+	
+	@Test
+	@DisplayName("Create team")
+	void createTeam() throws Exception {
+		// Arrange
+		Team teamNoId = new Team()
+			.setName("Name");
+
+		when(teamRepositoryMock.save(teamNoId)).thenReturn(team);
+		
+		TeamRequest teamRequest = new TeamRequest()
+			.setName("Name");
+		
+		TeamResponse expectedResponse = new TeamResponse(team);
+		
+		// Act
+		MvcResult result = this.mockMvc.perform(
+			post(TeamController.teamBaseURI + "/teams")
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(objectMapper.writeValueAsString(teamRequest))
+			)
+			.andExpect(status().isCreated())
+			.andExpect(header().string("Location", TeamController.teamBaseURI + "/teams" + "/1"))
+			.andReturn();
+		TeamResponse actualResponse = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<TeamResponse>() { });
+		
+		// Assert
+		verify(teamRepositoryMock, times(1)).save(teamNoId);
+		assertEquals("Invalid country response", expectedResponse, actualResponse);
+	}
+	
+	@Test
+	@DisplayName("Get team")
+	void getTeam() throws Exception {
+		// Arrange
 		Optional<Team> teamOptional = Optional.of(team);
 		
 		when(teamRepositoryMock.findById(1)).thenReturn(teamOptional);
 		
+		// Act
+		MvcResult result = this.mockMvc.perform(
+				get(TeamController.teamBaseURI + "/teams" + "/1")
+			)
+			.andExpect(status().is2xxSuccessful())
+			.andReturn();
+		
 		TeamResponse expectedResponse = new TeamResponse(team);
-		TeamResponse actualResponse = restTemplate.getForObject("/api/community/teams/1", TeamResponse.class);
+		TeamResponse actualResponse = new ObjectMapper().readValue(result.getResponse().getContentAsString(), new TypeReference<TeamResponse>() { });
 		
+		// Assert
 		verify(teamRepositoryMock, times(1)).findById(1);
-		assertThat("Should return valid team", actualResponse, equalTo(expectedResponse));
+		assertEquals("Invalid country response", expectedResponse, actualResponse);
 	}
 	
 	@Test
-	@DisplayName("Update Team")
-	void updateTeam() {
-	
-	}
-	
-	@Test
-	@DisplayName("Delete Team")
-	void deleteTeam() {
-		restTemplate.delete("/api/community/teams/1");
+	@DisplayName("Update team")
+	void updateTeam() throws Exception {
+		// Arrange
+		Team teamUpdated = new Team()
+				.setId(1)
+				.setName("NAME");
 		
+		Optional<Team> teamOptional = Optional.of(team);
+		
+		when(teamRepositoryMock.findById(1)).thenReturn(teamOptional);
+		when(teamRepositoryMock.save(any(Team.class))).thenReturn(teamUpdated);
+		
+		TeamRequest teamRequest = new TeamRequest()
+				.setName("NAME");
+		
+		// Act
+		MvcResult result = this.mockMvc.perform(
+			patch(TeamController.teamBaseURI + "/teams" + "/1")
+				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.content(objectMapper.writeValueAsString(teamRequest))
+			)
+			.andExpect(status().isOk())
+			.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+			.andExpect(jsonPath("$.id").exists())
+			.andReturn();
+		
+		TeamResponse expectedResponse = new TeamResponse(team);
+		expectedResponse.setName("NAME");
+		TeamResponse actualResponse = new ObjectMapper().readValue(result.getResponse().getContentAsString(), new TypeReference<TeamResponse>() { });
+		
+		// Assert
+		verify(teamRepositoryMock, times(1)).findById(1);
+		verify(teamRepositoryMock, times(1)).save(teamUpdated);
+		assertEquals("Invalid team response", expectedResponse, actualResponse);
+	}
+	
+	@Test
+	@DisplayName("Delete team")
+	void deleteTeam() throws Exception {
+		// Act
+		this.mockMvc.perform(
+				delete(TeamController.teamBaseURI + "/teams" + "/1")
+			)
+			.andExpect(status().isNoContent());
+		
+		// Assert
 		verify(teamRepositoryMock, times(1)).deleteById(1);
 	}
 	

@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Service
@@ -76,11 +77,13 @@ public class OrganizationServiceImpl implements OrganizationService {
 	
 	@Override
 	@Transactional
-	public void setOwnerToOrganization(Integer organizationId, Integer userId) {
-		Organization organization = this.getOrganizationById(organizationId);
-		User user = userService.getUserById(userId);
-		organization.setOwner(user);
-		organizationRepository.save(organization);
+	public void setOwnerToOrganization(Integer organizationId, @NotNull Integer userId) {
+		if (userId != null) {
+			Organization organization = this.getOrganizationById(organizationId);
+			User user = userService.getUserById(userId);
+			organization.setOwner(user);
+			organizationRepository.save(organization);
+		}
 	}
 	
 	@Override

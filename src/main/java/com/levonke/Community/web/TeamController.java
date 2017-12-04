@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,7 @@ public class TeamController {
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(value = "/teams", method = RequestMethod.POST)
-	public TeamResponse createTeam(@RequestBody TeamRequest teamRequest, HttpServletResponse response) {
+	public TeamResponse createTeam(@Valid @RequestBody TeamRequest teamRequest, HttpServletResponse response) {
 		Team team = teamService.createTeam(teamRequest);
 		response.addHeader(HttpHeaders.LOCATION, teamBaseURI + "/teams/" + team.getId());
 		return new TeamResponse(team);
@@ -48,7 +49,7 @@ public class TeamController {
 	}
 
 	@RequestMapping(value = "/teams/{teamId}", method = RequestMethod.PATCH)
-	public TeamResponse updateTeam(@PathVariable("teamId") final Integer teamId, @RequestBody TeamRequest teamRequest) {
+	public TeamResponse updateTeam(@PathVariable("teamId") final Integer teamId, @Valid @RequestBody TeamRequest teamRequest) {
 		return new TeamResponse(teamService.updateUserById(teamId, teamRequest));
 	}
 

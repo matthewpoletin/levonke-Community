@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,7 @@ public class OrganizationController {
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(value = "/organizations", method = RequestMethod.POST)
-	public OrganizationResponse createOrganization(@RequestBody OrganizationRequest organizationRequest, HttpServletResponse response) {
+	public OrganizationResponse createOrganization(@Valid @RequestBody OrganizationRequest organizationRequest, HttpServletResponse response) {
 		Organization organization = organizationService.createOrganization(organizationRequest);
 		response.addHeader(HttpHeaders.LOCATION, organizationBaseURI + "/organizations/" + organization.getId());
 		return new OrganizationResponse(organization);
@@ -49,7 +50,7 @@ public class OrganizationController {
 	}
 	
 	@RequestMapping(value = "/organizations/{organizationId}", method = RequestMethod.PATCH)
-	public OrganizationResponse update(@PathVariable("organizationId") final Integer organizationId, @RequestBody OrganizationRequest organizationRequest) {
+	public OrganizationResponse update(@PathVariable("organizationId") final Integer organizationId, @Valid @RequestBody OrganizationRequest organizationRequest) {
 		return new OrganizationResponse(organizationService.updateOrganizationById(organizationId, organizationRequest));
 	}
 	

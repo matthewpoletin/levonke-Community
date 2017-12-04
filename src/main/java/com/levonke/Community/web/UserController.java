@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,7 @@ public class UserController {
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(value = "/users", method = RequestMethod.POST)
-	public UserResponse createUser(@RequestBody UserRequest userRequest, HttpServletResponse response) {
+	public UserResponse createUser(@Valid @RequestBody UserRequest userRequest, HttpServletResponse response) {
 		User user = userService.createUser(userRequest);
 		response.addHeader(HttpHeaders.LOCATION, userBaseURI + "/users/" + user.getId());
 		return new UserResponse(user);
@@ -50,7 +51,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/users/{userId}", method = RequestMethod.PATCH)
-	public UserResponse updateUser(@PathVariable("userId") final Integer userId, @RequestBody UserRequest userRequest) {
+	public UserResponse updateUser(@PathVariable("userId") final Integer userId, @Valid @RequestBody UserRequest userRequest) {
 		return new UserResponse(userService.updateUserById(userId, userRequest));
 	}
 

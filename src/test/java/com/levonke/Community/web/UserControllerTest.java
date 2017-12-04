@@ -74,14 +74,14 @@ class UserControllerTest {
 	@DisplayName("Get users")
 	void getUsers() throws Exception {
 		// Arrange
-		List<User> users= new ArrayList<User>() {{
+		List<User> users = new ArrayList<User>() {{
 			add(user);
 		}};
 		
 		PageRequest pr = PageRequest.of(0, 25);
-		PageImpl<User> clientPage = new PageImpl<>(users, pr, 100);
+		PageImpl<User> userPage = new PageImpl<>(users, pr, 100);
 		
-		when(userRepositoryMock.findAll(any(Pageable.class))).thenReturn(clientPage);
+		when(userRepositoryMock.findAll(any(Pageable.class))).thenReturn(userPage);
 		
 		List<UserResponse> expectedResponse = users
 			.stream()
@@ -131,8 +131,6 @@ class UserControllerTest {
 			.setFbLink("fb.com/username")
 			.setGhLink("github.com/username");
 		
-		UserResponse expectedResponse = new UserResponse(user);
-		
 		// Act
 		MvcResult result = this.mockMvc.perform(
 			post(UserController.userBaseURI + "/users")
@@ -142,11 +140,13 @@ class UserControllerTest {
 			.andExpect(status().isCreated())
 			.andExpect(header().string("Location", UserController.userBaseURI + "/users" + "/1"))
 			.andReturn();
+		
 		UserResponse actualResponse = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<UserResponse>() { });
+		UserResponse expectedResponse = new UserResponse(user);
 		
 		// Assert
 		verify(userRepositoryMock, times(1)).save(userNoId);
-		assertEquals("Invalid country response", expectedResponse, actualResponse);
+		assertEquals("Invalid user response", expectedResponse, actualResponse);
 	}
 	
 	@Test
@@ -169,7 +169,7 @@ class UserControllerTest {
 		
 		// Assert
 		verify(userRepositoryMock, times(1)).findById(1);
-		assertEquals("Invalid country response", expectedResponse, actualResponse);
+		assertEquals("Invalid user response", expectedResponse, actualResponse);
 	}
 	
 	@Test

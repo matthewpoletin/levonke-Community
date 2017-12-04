@@ -92,9 +92,9 @@ class OrganizationControllerTest {
 		}};
 		
 		PageRequest pr = PageRequest.of(0, 25);
-		PageImpl<Organization> clientPage = new PageImpl<>(organizations, pr, 100);
+		PageImpl<Organization> organizationPage = new PageImpl<>(organizations, pr, 100);
 		
-		when(organizationRepositoryMock.findAll(any(Pageable.class))).thenReturn(clientPage);
+		when(organizationRepositoryMock.findAll(any(Pageable.class))).thenReturn(organizationPage);
 		
 		List<OrganizationResponse> expectedResponse = organizations
 				.stream()
@@ -153,7 +153,7 @@ class OrganizationControllerTest {
 		
 		// Assert
 		verify(organizationRepositoryMock, times(1)).save(organizationNoId);
-		assertEquals("Invalid country response", expectedResponse, actualResponse);
+		assertEquals("Invalid organization response", expectedResponse, actualResponse);
 	}
 	
 	@Test
@@ -176,7 +176,7 @@ class OrganizationControllerTest {
 		
 		// Assert
 		verify(organizationRepositoryMock, times(1)).findById(1);
-		assertEquals("Invalid country response", expectedResponse, actualResponse);
+		assertEquals("Invalid organization response", expectedResponse, actualResponse);
 	}
 	
 	@Test

@@ -103,9 +103,9 @@ class TeamControllerTest {
 		}};
 		
 		PageRequest pr = PageRequest.of(0, 25);
-		PageImpl<Team> clientPage = new PageImpl<>(teams, pr, 100);
+		PageImpl<Team> teamPage = new PageImpl<>(teams, pr, 100);
 		
-		when(teamRepositoryMock.findAll(any(Pageable.class))).thenReturn(clientPage);
+		when(teamRepositoryMock.findAll(any(Pageable.class))).thenReturn(teamPage);
 		
 		List<TeamResponse> expectedResponse = teams
 			.stream()
@@ -156,7 +156,7 @@ class TeamControllerTest {
 		
 		// Assert
 		verify(teamRepositoryMock, times(1)).save(teamNoId);
-		assertEquals("Invalid country response", expectedResponse, actualResponse);
+		assertEquals("Invalid team response", expectedResponse, actualResponse);
 	}
 	
 	@Test
@@ -179,7 +179,7 @@ class TeamControllerTest {
 		
 		// Assert
 		verify(teamRepositoryMock, times(1)).findById(1);
-		assertEquals("Invalid country response", expectedResponse, actualResponse);
+		assertEquals("Invalid team response", expectedResponse, actualResponse);
 	}
 	
 	@Test

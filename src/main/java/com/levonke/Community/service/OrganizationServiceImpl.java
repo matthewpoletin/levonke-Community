@@ -64,7 +64,6 @@ public class OrganizationServiceImpl implements OrganizationService {
 		organization.setDescription(organizationRequest.getDescription() != null ? organizationRequest.getDescription() : organization.getDescription());
 		organization.setPubEmail(organizationRequest.getPubEmail() != null ? organizationRequest.getPubEmail() : organization.getPubEmail());
 		organization.setWebsite(organizationRequest.getWebsite() != null ? organizationRequest.getWebsite() : organization.getWebsite());
-		
 		this.setOwnerToOrganization(organizationId, organizationRequest.getOwnerId());
 		return organizationRepository.save(organization);
 	}

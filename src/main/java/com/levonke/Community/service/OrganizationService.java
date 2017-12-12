@@ -1,6 +1,7 @@
 package com.levonke.Community.service;
 
 import com.levonke.Community.domain.Organization;
+import com.levonke.Community.domain.Team;
 import com.levonke.Community.domain.User;
 import com.levonke.Community.web.model.OrganizationRequest;
 
@@ -15,4 +16,6 @@ public interface OrganizationService {
 	
 	void setOwnerToOrganization(Integer organizationId, Integer userId);
 	User getOwnerOfOrganization(Integer organizationId);
+	
+	List<Team> getTeamsOfOrganization(Integer organizationId);
 }

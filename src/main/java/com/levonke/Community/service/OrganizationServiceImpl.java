@@ -1,5 +1,6 @@
 package com.levonke.Community.service;
 
+import com.levonke.Community.domain.Team;
 import com.levonke.Community.domain.User;
 import com.levonke.Community.web.model.OrganizationRequest;
 import com.levonke.Community.domain.Organization;
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
@@ -90,6 +93,12 @@ public class OrganizationServiceImpl implements OrganizationService {
 	public User getOwnerOfOrganization(Integer organizationId) {
 		Organization organization = this.getOrganizationById(organizationId);
 		return userService.getUserById(organization.getId());
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<Team> getTeamsOfOrganization(Integer organizationId) {
+		return new ArrayList<>(this.getOrganizationById(organizationId).getTeams());
 	}
 	
 }

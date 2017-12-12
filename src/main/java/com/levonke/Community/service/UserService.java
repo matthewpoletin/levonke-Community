@@ -10,6 +10,7 @@ public interface UserService {
 	Page<User> getUsers(Integer page, Integer count);
 	User createUser(UserRequest	userRequest);
 	User getUserById(Integer userId);
+	User getUserByUsername(String username);
 	User updateUserById(Integer userId, UserRequest userRequest);
 	void deleteUserById(Integer userId);
 	

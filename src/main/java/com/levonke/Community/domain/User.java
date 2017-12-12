@@ -16,6 +16,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	// TODO: Make unique case-insensitive
 	@Column(name = "users_username", unique = true)
 	private String username;
 	

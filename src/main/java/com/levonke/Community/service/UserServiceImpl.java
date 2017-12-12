@@ -57,6 +57,12 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
+	public User getUserByUsername(String username) {
+		return userRepository.getUserByUsernameIgnoreCase(username);
+	}
+	
+	@Override
 	@Transactional
 	public User updateUserById(Integer userId, UserRequest userRequest) {
 		User user = this.getUserById(userId);

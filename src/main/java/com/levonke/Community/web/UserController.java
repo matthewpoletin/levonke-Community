@@ -49,7 +49,13 @@ public class UserController {
 	public UserResponse getUser(@PathVariable("userId") final Integer userId) {
 		return new UserResponse(userService.getUserById(userId));
 	}
-
+	
+	@RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
+	public UserResponse getUserByUsername(@PathVariable("username") final String username) {
+		return new UserResponse(userService.getUserByUsername(username));
+	}
+	
+	
 	@RequestMapping(value = "/users/{userId}", method = RequestMethod.PATCH)
 	public UserResponse updateUser(@PathVariable("userId") final Integer userId, @Valid @RequestBody UserRequest userRequest) {
 		return new UserResponse(userService.updateUserById(userId, userRequest));

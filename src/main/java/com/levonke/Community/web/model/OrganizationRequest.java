@@ -12,6 +12,8 @@ public class OrganizationRequest {
 	@NotEmpty(message = "Not valid name")
 	String name;
 	
+	String officialName;
+	
 	String description;
 	
 	String pubEmail;
@@ -19,4 +21,5 @@ public class OrganizationRequest {
 	String website;
 	
 	Integer ownerId;
+	
 }

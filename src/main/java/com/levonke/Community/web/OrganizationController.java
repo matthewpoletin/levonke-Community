@@ -8,6 +8,7 @@ import com.levonke.Community.web.model.OrganizationResponse;
 import com.levonke.Community.web.model.TeamResponse;
 import com.levonke.Community.web.model.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +31,15 @@ public class OrganizationController {
 	}
 	
 	@RequestMapping(value = "/organizations", method = RequestMethod.GET)
-	public List<OrganizationResponse> getOrganizations(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size) {
-		return organizationService.getOrganizations(page, size)
+	public List<OrganizationResponse> getOrganizations(@RequestParam(value = "page", required = false) Integer page,
+													   @RequestParam(value = "size", required = false) Integer size,
+													   @RequestParam(value = "name", required = false) String name) {
+		page = page != null ? page : 0;
+		size = size != null ? size : 25;
+		Page<Organization> organizationPage;
+		if (name != null) organizationPage = organizationService.getOrganizationsWithName(name, page, size);
+		else organizationPage = organizationService.getOrganizations(page, size);
+		return organizationPage
 			.stream()
 			.map(OrganizationResponse::new)
 			.collect(Collectors.toList());
@@ -46,18 +54,23 @@ public class OrganizationController {
 	}
 	
 	@RequestMapping(value = "/organizations/{organizationId}", method = RequestMethod.GET)
-	public OrganizationResponse getOrganization(@PathVariable("organizationId") final Integer organizationId) {
+	public OrganizationResponse getOrganizationById(@PathVariable("organizationId") final Integer organizationId) {
 		return new OrganizationResponse(organizationService.getOrganizationById(organizationId));
 	}
 	
+	@RequestMapping(value = "/organizations/name/{name}", method = RequestMethod.GET)
+	public OrganizationResponse getOrganizationByName(@PathVariable("name") final String name) {
+		return new OrganizationResponse(organizationService.getOrganizationByName(name));
+	}
+	
 	@RequestMapping(value = "/organizations/{organizationId}", method = RequestMethod.PATCH)
-	public OrganizationResponse update(@PathVariable("organizationId") final Integer organizationId, @Valid @RequestBody OrganizationRequest organizationRequest) {
+	public OrganizationResponse updateOrganizationById(@PathVariable("organizationId") final Integer organizationId, @Valid @RequestBody OrganizationRequest organizationRequest) {
 		return new OrganizationResponse(organizationService.updateOrganizationById(organizationId, organizationRequest));
 	}
 	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@RequestMapping(value = "/organizations/{organizationId}", method = RequestMethod.DELETE)
-	public void deleteOrganization(@PathVariable("organizationId") final Integer organizationId) {
+	public void deleteOrganizationById(@PathVariable("organizationId") final Integer organizationId) {
 		organizationService.deleteOrganizationById(organizationId);
 	}
 	
@@ -73,8 +86,12 @@ public class OrganizationController {
 	}
 	
 	@RequestMapping(value = "/organizations/{organizationId}/teams", method = RequestMethod.GET)
-	public List<TeamResponse> getTeamsOfOrganization(@PathVariable("organizationId") final Integer organizationId) {
-		return organizationService.getTeamsOfOrganization(organizationId)
+	public List<TeamResponse> getTeamsOfOrganization(@PathVariable("organizationId") final Integer organizationId,
+													 @RequestParam(value = "page", required = false) Integer page,
+													 @RequestParam(value = "size", required = false) Integer size) {
+		page = page != null ? page : 0;
+		size = size != null ? size : 25;
+		return organizationService.getTeamsOfOrganization(organizationId, page, size)
 			.stream()
 			.map(TeamResponse::new)
 			.collect(Collectors.toList());

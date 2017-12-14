@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 public class OrganizationResponse {
 	Integer id;
 	String name;
+	String officialName;
 	String description;
 	String pubEmail;
 	String website;
@@ -19,7 +20,8 @@ public class OrganizationResponse {
 	public OrganizationResponse(Organization organization) {
 		this.id = organization.getId();
 		this.name = organization.getName();
-		this.description = organization.getName();
+		this.officialName = organization.getOfficialName();
+		this.description = organization.getDescription();
 		this.pubEmail = organization.getPubEmail();
 		this.website = organization.getWebsite();
 		this.ownerId = organization.getOwner() != null ? organization.getOwner().getId() : null;

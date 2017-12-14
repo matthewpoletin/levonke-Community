@@ -6,6 +6,7 @@ import com.levonke.Community.web.model.TeamRequest;
 import com.levonke.Community.web.model.TeamResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +29,15 @@ public class TeamController {
 	}
 	
 	@RequestMapping(value = "/teams", method = RequestMethod.GET)
-	public List<TeamResponse> getTeams(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size) {
-		return teamService.getTeams(page, size)
+	public List<TeamResponse> getTeams(@RequestParam(value = "page", required = false) Integer page,
+									   @RequestParam(value = "size", required = false) Integer size,
+									   @RequestParam(value = "name", required = false) String name) {
+		page = page != null ? page : 0;
+		size = size != null ? size : 25;
+		Page<Team> teamPage;
+		if (name != null) teamPage = teamService.getTeamsWithName(name, page, size);
+		else teamPage = teamService.getTeams(page, size);
+		return teamPage
 			.stream()
 			.map(TeamResponse::new)
 			.collect(Collectors.toList());
@@ -44,15 +52,20 @@ public class TeamController {
 	}
 
 	@RequestMapping(value = "/teams/{teamId}", method = RequestMethod.GET)
-	public TeamResponse getTeam(@PathVariable("teamId") final Integer teamId) {
+	public TeamResponse getTeamById(@PathVariable("teamId") final Integer teamId) {
 		return new TeamResponse(teamService.getTeamById(teamId));
 	}
-
+	
+	@RequestMapping(value = "/teams/name/{name}", method = RequestMethod.GET)
+	public TeamResponse getTeamByName(@PathVariable("name") final String name) {
+		return new TeamResponse(teamService.getTeamByName(name));
+	}
+	
 	@RequestMapping(value = "/teams/{teamId}", method = RequestMethod.PATCH)
 	public TeamResponse updateTeam(@PathVariable("teamId") final Integer teamId, @Valid @RequestBody TeamRequest teamRequest) {
 		return new TeamResponse(teamService.updateUserById(teamId, teamRequest));
 	}
-
+	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@RequestMapping(value = "/teams/{teamId}", method = RequestMethod.DELETE)
 	public void deleteTeam(@PathVariable("teamId") final Integer teamId) {

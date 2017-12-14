@@ -1,14 +1,19 @@
+
 package com.levonke.Community.service;
 
 import com.levonke.Community.domain.Team;
 import com.levonke.Community.web.model.TeamRequest;
 
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 
 public interface TeamService {
-	List<Team> getTeams(Integer size, Integer page);
+	Page<Team> getTeams(Integer page, Integer size);
+	Page<Team> getTeamsWithName(String name, Integer page, Integer size);
 	Team createTeam(TeamRequest teamRequest);
 	Team getTeamById(Integer teamId);
+	Team getTeamByName(String name);
 	Team updateUserById(Integer teamId, TeamRequest teamRequest);
 	void deleteTeamById(Integer teamId);
 	

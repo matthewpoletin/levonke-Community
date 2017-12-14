@@ -26,12 +26,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<User> getUsers(Integer page, Integer size) {
-		if(page == null)
-			page = 0;
-		if (size == null) {
-			size = 25;
-		}
 		return userRepository.findAll(PageRequest.of(page, size));
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Page<User> getUsersWithUsername(String username, Integer page, Integer size) {
+		return userRepository.getUsersByUsernameContainingIgnoreCase(username, PageRequest.of(page, size));
 	}
 	
 	@Override
@@ -60,6 +61,12 @@ public class UserServiceImpl implements UserService {
 	@Transactional(readOnly = true)
 	public User getUserByUsername(String username) {
 		return userRepository.getUserByUsernameIgnoreCase(username);
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public User getUserByRegEmail(String regEmail) {
+		return userRepository.getUserByRegEmailIgnoreCase(regEmail);
 	}
 	
 	@Override

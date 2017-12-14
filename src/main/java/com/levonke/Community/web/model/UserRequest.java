@@ -16,13 +16,12 @@ public class UserRequest {
 	@NotEmpty(message = "Not valid password")
 	private String password;
 	
-	@NotEmpty(message = "Not valid forename")
+	@NotEmpty(message = "Not valid regEmail")
+	private String regEmail;
+	
 	private String forename;
 	
-	@NotEmpty(message = "Not valid surname")
 	private String surname;
-	
-	private String regEmail;
 	
 	private String pubEmail;
 	

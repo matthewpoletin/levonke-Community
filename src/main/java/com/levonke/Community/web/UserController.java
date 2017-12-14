@@ -29,8 +29,14 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
-	public List<UserResponse> getUsers(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size) {
-		Page<User> userPage = userService.getUsers(page, size);
+	public List<UserResponse> getUsers(@RequestParam(value = "page", required = false) Integer page,
+									   @RequestParam(value = "size", required = false) Integer size,
+									   @RequestParam(value = "username", required = false) String username) {
+		page = page != null ? page : 0;
+		size = size != null ? size : 25;
+		Page<User> userPage;
+		if (username != null) userPage = userService.getUsersWithUsername(username, page, size);
+		else userPage = userService.getUsers(page, size);
 		return userPage
 			.stream()
 			.map(UserResponse::new)
@@ -46,15 +52,19 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/users/{userId}", method = RequestMethod.GET)
-	public UserResponse getUser(@PathVariable("userId") final Integer userId) {
+	public UserResponse getUserById(@PathVariable("userId") final Integer userId) {
 		return new UserResponse(userService.getUserById(userId));
 	}
 	
-	@RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
+	@RequestMapping(value = "/users/username/{username}", method = RequestMethod.GET)
 	public UserResponse getUserByUsername(@PathVariable("username") final String username) {
 		return new UserResponse(userService.getUserByUsername(username));
 	}
 	
+	@RequestMapping(value = "/users/email/{email:.+}", method = RequestMethod.GET)
+	public UserResponse getUserByEmail(@PathVariable("email") final String email) {
+		return new UserResponse(userService.getUserByRegEmail(email));
+	}
 	
 	@RequestMapping(value = "/users/{userId}", method = RequestMethod.PATCH)
 	public UserResponse updateUser(@PathVariable("userId") final Integer userId, @Valid @RequestBody UserRequest userRequest) {

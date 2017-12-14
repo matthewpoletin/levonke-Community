@@ -5,6 +5,7 @@ import com.levonke.Community.repository.TeamRepository;
 import com.levonke.Community.web.model.TeamRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,13 +32,13 @@ public class TeamServiceImpl implements TeamService {
 	
 	@Override
 	@Transactional(readOnly = true)
-	public List<Team> getTeams(Integer page, Integer size) {
-		if(page == null)
-			page = 0;
-		if (size == null) {
-			size = 25;
-		}
-		return teamRepository.findAll(PageRequest.of(page, size)).getContent();
+	public Page<Team> getTeams(Integer page, Integer size) {
+		return teamRepository.findAll(PageRequest.of(page, size));
+	}
+	
+	@Override
+	public Page<Team> getTeamsWithName(String name, Integer page, Integer size) {
+		return teamRepository.getTeamsByNameContainingIgnoreCase(name, PageRequest.of(page, size));
 	}
 	
 	@Override
@@ -54,6 +55,12 @@ public class TeamServiceImpl implements TeamService {
 	public Team getTeamById(Integer teamId) {
 		return teamRepository.findById(teamId)
 			.orElseThrow(() -> new EntityNotFoundException("Team '{" + teamId + "}' not found"));
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Team getTeamByName(String name) {
+		return teamRepository.getTeamByNameIgnoreCase(name);
 	}
 	
 	@Override

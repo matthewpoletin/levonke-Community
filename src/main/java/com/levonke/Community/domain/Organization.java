@@ -21,6 +21,9 @@ public class Organization {
 	@Column(name = "organizations_name", unique = true)
 	private String name;
 	
+	@Column(name = "organizations_official_name")
+	private String officialName;
+	
 	@Column(name = "organizations_description")
 	private String description;
 	

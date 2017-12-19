@@ -14,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(OrganizationController.organizationBaseURI)
@@ -31,7 +29,7 @@ public class OrganizationController {
 	}
 	
 	@RequestMapping(value = "/organizations", method = RequestMethod.GET)
-	public List<OrganizationResponse> getOrganizations(@RequestParam(value = "page", required = false) Integer page,
+	public Page<OrganizationResponse> getOrganizations(@RequestParam(value = "page", required = false) Integer page,
 													   @RequestParam(value = "size", required = false) Integer size,
 													   @RequestParam(value = "name", required = false) String name) {
 		page = page != null ? page : 0;
@@ -40,9 +38,7 @@ public class OrganizationController {
 		if (name != null) organizationPage = organizationService.getOrganizationsWithName(name, page, size);
 		else organizationPage = organizationService.getOrganizations(page, size);
 		return organizationPage
-			.stream()
-			.map(OrganizationResponse::new)
-			.collect(Collectors.toList());
+			.map(OrganizationResponse::new);
 	}
 	
 	@ResponseStatus(HttpStatus.CREATED)
@@ -58,13 +54,28 @@ public class OrganizationController {
 		return new OrganizationResponse(organizationService.getOrganizationById(organizationId));
 	}
 	
-	@RequestMapping(value = "/organizations/name/{name}", method = RequestMethod.GET)
-	public OrganizationResponse getOrganizationByName(@PathVariable("name") final String name) {
-		return new OrganizationResponse(organizationService.getOrganizationByName(name));
+	@RequestMapping(value = "/organizations/by", method = RequestMethod.GET)
+	public OrganizationResponse getOrganizationBy(@RequestParam(name = "name", required = false) final String name,
+										  HttpServletResponse response) {
+		Organization organization;
+		if (name != null && name.length() > 0) {
+			organization = organizationService.getOrganizationByName(name);
+		} else {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return null;
+		}
+		
+		if (organization != null) {
+			return new OrganizationResponse(organization);
+		} else {
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			return null;
+		}
 	}
 	
 	@RequestMapping(value = "/organizations/{organizationId}", method = RequestMethod.PATCH)
-	public OrganizationResponse updateOrganizationById(@PathVariable("organizationId") final Integer organizationId, @Valid @RequestBody OrganizationRequest organizationRequest) {
+	public OrganizationResponse updateOrganizationById(@PathVariable("organizationId") final Integer organizationId,
+													   @Valid @RequestBody OrganizationRequest organizationRequest) {
 		return new OrganizationResponse(organizationService.updateOrganizationById(organizationId, organizationRequest));
 	}
 	
@@ -76,7 +87,8 @@ public class OrganizationController {
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(value = "/organizations/{organizationId}/owner/{userId}", method = RequestMethod.POST)
-	public void setOwnerToOrganization(@PathVariable("organizationId") final Integer organizationId, @PathVariable("userId") final Integer userId) {
+	public void setOwnerToOrganization(@PathVariable("organizationId") final Integer organizationId,
+									   @PathVariable("userId") final Integer userId) {
 		organizationService.setOwnerToOrganization(organizationId, userId);
 	}
 	
@@ -86,15 +98,13 @@ public class OrganizationController {
 	}
 	
 	@RequestMapping(value = "/organizations/{organizationId}/teams", method = RequestMethod.GET)
-	public List<TeamResponse> getTeamsOfOrganization(@PathVariable("organizationId") final Integer organizationId,
+	public Page<TeamResponse> getTeamsOfOrganization(@PathVariable("organizationId") final Integer organizationId,
 													 @RequestParam(value = "page", required = false) Integer page,
 													 @RequestParam(value = "size", required = false) Integer size) {
 		page = page != null ? page : 0;
 		size = size != null ? size : 25;
 		return organizationService.getTeamsOfOrganization(organizationId, page, size)
-			.stream()
-			.map(TeamResponse::new)
-			.collect(Collectors.toList());
+			.map(TeamResponse::new);
 	}
 	
 }

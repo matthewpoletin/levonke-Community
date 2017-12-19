@@ -8,13 +8,13 @@ INSERT INTO community.users(users_username, users_password, users_forename, user
 	VALUES ('sworen', '1a1dc91c907325c69271ddf0c944bc72', 'Isaac', 'Grey', 'persicor@gmail.com', 'persicor@gmail.com', 'github.com/isaac_grey', 'fb.me/isaacg');
 
 INSERT INTO community.organizations(organizations_name, organizations_official_name, organizations_description, organizations_pubemail, organizations_website, organizations_owner_id)
-	VALUES ('Haywire Corp.', 'Haywire', 'Wearable technologies', 'ask@haywire.ru', 'haywire.ru', (SELECT users_id FROM community.users WHERE users_username = 'MatthewPoletin'));
+	VALUES ('Haywire', 'Haywire Corp.', 'Wearable technologies', 'ask@haywire.ru', 'haywire.ru', (SELECT users_id FROM community.users WHERE users_username = 'MatthewPoletin'));
 INSERT INTO community.organizations(organizations_name, organizations_official_name, organizations_description, organizations_pubemail, organizations_website, organizations_owner_id)
-	VALUES ('Dreamedia Inc.', 'Dreamedia', 'Digital illusions', 'contact@dreamedia.com', 'dreamedia.com', (SELECT users_id FROM community.users WHERE users_username = 'MatthewPoletin'));
+	VALUES ('Dreamedia', 'Dreamedia Inc.', 'Digital illusions', 'contact@dreamedia.com', 'dreamedia.com', (SELECT users_id FROM community.users WHERE users_username = 'MatthewPoletin'));
 INSERT INTO community.organizations(organizations_name, organizations_official_name, organizations_description, organizations_pubemail, organizations_website, organizations_owner_id)
-	VALUES ('Nerra AB.', 'Nerra', 'Software enchantments', 'support@nerra.com', 'nerra.com', (SELECT users_id FROM community.users WHERE users_username = 'kormvina'));
+	VALUES ('Nerra', 'Nerra AB.', 'Software enchantments', 'support@nerra.com', 'nerra.com', (SELECT users_id FROM community.users WHERE users_username = 'kormvina'));
 INSERT INTO community.organizations(organizations_name, organizations_official_name, organizations_description, organizations_pubemail, organizations_website, organizations_owner_id)
-	VALUES ('Ecorp', 'ecorp', 'One of the largest multi-national conglomerates in the world. Among their enterprises, they manufacture computers, phones, and tablets, and maintain a banking and consumer credit division.', 'help@ecorp.com', 'ecorp.com', (SELECT users_id FROM community.users WHERE users_username = 'sworen'));
+	VALUES ('ecorp', 'Ecorp', 'One of the largest multi-national conglomerates in the world. Among their enterprises, they manufacture computers, phones, and tablets, and maintain a banking and consumer credit division.', 'help@ecorp.com', 'ecorp.com', (SELECT users_id FROM community.users WHERE users_username = 'sworen'));
 
 INSERT INTO community.teams(teams_name, teams_organization_id)
     VALUES ('Wearables', (SELECT organizations_id FROM community.organizations WHERE organizations_name = 'Haywire Corp.'));

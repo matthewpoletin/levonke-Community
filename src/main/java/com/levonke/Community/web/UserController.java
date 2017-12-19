@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(UserController.userBaseURI)
@@ -29,7 +27,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
-	public List<UserResponse> getUsers(@RequestParam(value = "page", required = false) Integer page,
+	public Page<UserResponse> getUsers(@RequestParam(value = "page", required = false) Integer page,
 									   @RequestParam(value = "size", required = false) Integer size,
 									   @RequestParam(value = "username", required = false) String username) {
 		page = page != null ? page : 0;
@@ -38,14 +36,13 @@ public class UserController {
 		if (username != null) userPage = userService.getUsersWithUsername(username, page, size);
 		else userPage = userService.getUsers(page, size);
 		return userPage
-			.stream()
-			.map(UserResponse::new)
-			.collect(Collectors.toList());
+			.map(UserResponse::new);
 	}
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(value = "/users", method = RequestMethod.POST)
-	public UserResponse createUser(@Valid @RequestBody UserRequest userRequest, HttpServletResponse response) {
+	public UserResponse createUser(@Valid @RequestBody UserRequest userRequest,
+								   HttpServletResponse response) {
 		User user = userService.createUser(userRequest);
 		response.addHeader(HttpHeaders.LOCATION, userBaseURI + "/users/" + user.getId());
 		return new UserResponse(user);
@@ -56,18 +53,31 @@ public class UserController {
 		return new UserResponse(userService.getUserById(userId));
 	}
 	
-	@RequestMapping(value = "/users/username/{username}", method = RequestMethod.GET)
-	public UserResponse getUserByUsername(@PathVariable("username") final String username) {
-		return new UserResponse(userService.getUserByUsername(username));
-	}
-	
-	@RequestMapping(value = "/users/email/{email:.+}", method = RequestMethod.GET)
-	public UserResponse getUserByEmail(@PathVariable("email") final String email) {
-		return new UserResponse(userService.getUserByRegEmail(email));
+	@RequestMapping(value = "/users/by", method = RequestMethod.GET)
+	public UserResponse getUserBy(@RequestParam(name = "username", required = false) final String username,
+								  @RequestParam(name = "email", required = false) final String email,
+								  HttpServletResponse response) {
+		User user;
+		if (username != null && username.length() > 0) {
+			user = userService.getUserByUsername(username);
+		} else if (email != null && email.length() > 0) {
+			user = userService.getUserByRegEmail(email);
+		} else {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return null;
+		}
+		
+		if (user != null) {
+			return new UserResponse(user);
+		} else {
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			return null;
+		}
 	}
 	
 	@RequestMapping(value = "/users/{userId}", method = RequestMethod.PATCH)
-	public UserResponse updateUser(@PathVariable("userId") final Integer userId, @Valid @RequestBody UserRequest userRequest) {
+	public UserResponse updateUser(@PathVariable("userId") final Integer userId,
+								   @Valid @RequestBody UserRequest userRequest) {
 		return new UserResponse(userService.updateUserById(userId, userRequest));
 	}
 

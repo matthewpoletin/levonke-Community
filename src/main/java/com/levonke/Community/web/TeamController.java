@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(TeamController.teamBaseURI)
@@ -29,7 +28,7 @@ public class TeamController {
 	}
 	
 	@RequestMapping(value = "/teams", method = RequestMethod.GET)
-	public List<TeamResponse> getTeams(@RequestParam(value = "page", required = false) Integer page,
+	public Page<TeamResponse> getTeams(@RequestParam(value = "page", required = false) Integer page,
 									   @RequestParam(value = "size", required = false) Integer size,
 									   @RequestParam(value = "name", required = false) String name) {
 		page = page != null ? page : 0;
@@ -38,14 +37,13 @@ public class TeamController {
 		if (name != null) teamPage = teamService.getTeamsWithName(name, page, size);
 		else teamPage = teamService.getTeams(page, size);
 		return teamPage
-			.stream()
-			.map(TeamResponse::new)
-			.collect(Collectors.toList());
+			.map(TeamResponse::new);
 	}
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(value = "/teams", method = RequestMethod.POST)
-	public TeamResponse createTeam(@Valid @RequestBody TeamRequest teamRequest, HttpServletResponse response) {
+	public TeamResponse createTeam(@Valid @RequestBody TeamRequest teamRequest,
+								   HttpServletResponse response) {
 		Team team = teamService.createTeam(teamRequest);
 		response.addHeader(HttpHeaders.LOCATION, teamBaseURI + "/teams/" + team.getId());
 		return new TeamResponse(team);
@@ -56,13 +54,28 @@ public class TeamController {
 		return new TeamResponse(teamService.getTeamById(teamId));
 	}
 	
-	@RequestMapping(value = "/teams/name/{name}", method = RequestMethod.GET)
-	public TeamResponse getTeamByName(@PathVariable("name") final String name) {
-		return new TeamResponse(teamService.getTeamByName(name));
+	@RequestMapping(value = "/teams/by", method = RequestMethod.GET)
+	public TeamResponse getTeamBy(@RequestParam(name = "name", required = false) final String name,
+								  HttpServletResponse response) {
+		Team team;
+		if (name != null && name.length() > 0) {
+			team = teamService.getTeamByName(name);
+		} else {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			return null;
+		}
+		
+		if (team != null) {
+			return new TeamResponse(team);
+		} else {
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			return null;
+		}
 	}
 	
 	@RequestMapping(value = "/teams/{teamId}", method = RequestMethod.PATCH)
-	public TeamResponse updateTeam(@PathVariable("teamId") final Integer teamId, @Valid @RequestBody TeamRequest teamRequest) {
+	public TeamResponse updateTeam(@PathVariable("teamId") final Integer teamId,
+								   @Valid @RequestBody TeamRequest teamRequest) {
 		return new TeamResponse(teamService.updateUserById(teamId, teamRequest));
 	}
 	
@@ -74,7 +87,8 @@ public class TeamController {
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(value = "/teams/{teamId}/organization/{organizationId}", method = RequestMethod.POST)
-	public void setOrganization(@PathVariable("teamId") final Integer teamId, @PathVariable("organizationId") final Integer organizationId) {
+	public void setOrganization(@PathVariable("teamId") final Integer teamId,
+								@PathVariable("organizationId") final Integer organizationId) {
 		teamService.setOrganizationForTeam(teamId, organizationId);
 	}
 	
@@ -85,13 +99,15 @@ public class TeamController {
 	
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(value = "/teams/{teamId}/users/{userId}", method = RequestMethod.POST)
-	public void addUserToTeam(@PathVariable("teamId") final Integer teamId, @PathVariable("userId") final Integer userId) {
+	public void addUserToTeam(@PathVariable("teamId") final Integer teamId,
+							  @PathVariable("userId") final Integer userId) {
 		teamService.addUser(teamId, userId);
 	}
 	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@RequestMapping(value = "/teams/{teamId}/users/{userId}", method = RequestMethod.DELETE)
-	public void removeUserFromTeam(@PathVariable("teamId") final Integer teamId, @PathVariable("userId") final Integer userId) {
+	public void removeUserFromTeam(@PathVariable("teamId") final Integer teamId,
+								   @PathVariable("userId") final Integer userId) {
 		teamService.removeUser(teamId, userId);
 	}
 

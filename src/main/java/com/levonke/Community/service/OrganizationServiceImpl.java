@@ -62,7 +62,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 	
 	@Override
 	public Organization getOrganizationByName(String name) {
-		return null;
+		return organizationRepository.getOrganizationByNameIgnoreCase(name);
 	}
 	
 	@Override

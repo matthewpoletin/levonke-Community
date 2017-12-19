@@ -1,7 +1,9 @@
 package com.levonke.Community.web;
 
 import com.levonke.Community.domain.User;
+import com.levonke.Community.service.UserService;
 import com.levonke.Community.service.UserServiceImpl;
+import com.levonke.Community.web.model.TeamResponse;
 import com.levonke.Community.web.model.UserRequest;
 import com.levonke.Community.web.model.UserResponse;
 
@@ -12,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(UserController.userBaseURI)
@@ -85,6 +89,14 @@ public class UserController {
 	@RequestMapping(value = "/users/{userId}", method = RequestMethod.DELETE)
 	public void deleteUser(@PathVariable("userId") final Integer userId) {
 		userService.deleteUserById(userId);
+	}
+	
+	@RequestMapping(value = "/users/{userId}/teams", method = RequestMethod.GET)
+	public List<TeamResponse> getTeamsWithUser(@PathVariable("userId") final Integer userId) {
+		return userService.getTeamsWithUser(userId)
+			.stream()
+			.map(TeamResponse::new)
+			.collect(Collectors.toList());
 	}
 
 }

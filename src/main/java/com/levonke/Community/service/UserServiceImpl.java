@@ -1,5 +1,6 @@
 package com.levonke.Community.service;
 
+import com.levonke.Community.domain.Team;
 import com.levonke.Community.domain.User;
 import com.levonke.Community.repository.UserRepository;
 import com.levonke.Community.web.model.UserRequest;
@@ -92,10 +93,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	@Transactional(readOnly = true)
-	public List<Integer> getTeamsOfUser(Integer userId) {
-		List<Integer> teamsId = new ArrayList<>();
-		this.getUserById(userId).getTeams().forEach(team -> teamsId.add(team.getId()));
-		return teamsId;
+	public List<Team> getTeamsWithUser(Integer userId) {
+		User user = this.getUserById(userId);
+		return new ArrayList<>(user.getTeams());
 	}
 	
 }

@@ -1,6 +1,5 @@
 package com.levonke.Community.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import javax.persistence.*;

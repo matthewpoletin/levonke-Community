@@ -20,8 +20,11 @@ public class User {
 	@Column(name = "users_username", unique = true)
 	private String username;
 	
-	@Column(name = "users_password")
-	private String password;
+	@Column(name = "users_avatar")
+	private String avatar;
+	
+	@Column(name = "users_bio")
+	private String bio;
 	
 	@Column(name = "users_forename")
 	private String forename;
@@ -40,6 +43,9 @@ public class User {
 	
 	@Column(name = "users_fblink")
 	private String fbLink;
+	
+	@Column(name = "users_password")
+	private String password;
 	
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
 	private Collection<Organization> organizations = new ArrayList<>();

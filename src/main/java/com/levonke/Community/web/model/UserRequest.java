@@ -2,7 +2,6 @@ package com.levonke.Community.web.model;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -13,11 +12,12 @@ public class UserRequest {
 	@NotEmpty(message = "Not valid username")
 	private String username;
 	
-	@NotEmpty(message = "Not valid password")
-	private String password;
-	
 	@NotEmpty(message = "Not valid regEmail")
 	private String regEmail;
+	
+	private String avatar;
+	
+	private String bio;
 	
 	private String forename;
 	
@@ -28,5 +28,7 @@ public class UserRequest {
 	private String ghLink;
 	
 	private String fbLink;
+	
+	private String password;
 	
 }

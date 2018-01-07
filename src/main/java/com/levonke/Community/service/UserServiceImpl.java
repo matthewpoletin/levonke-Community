@@ -41,13 +41,15 @@ public class UserServiceImpl implements UserService {
 	public User createUser(UserRequest userRequest) {
 		User user = new User()
 			.setUsername(userRequest.getUsername())
-			.setPassword(userRequest.getPassword())
+			.setAvatar(userRequest.getAvatar())
+			.setBio(userRequest.getAvatar())
 			.setForename(userRequest.getForename())
 			.setSurname(userRequest.getSurname())
 			.setRegEmail(userRequest.getRegEmail())
 			.setPubEmail(userRequest.getPubEmail())
 			.setFbLink(userRequest.getFbLink())
-			.setGhLink(userRequest.getGhLink());
+			.setGhLink(userRequest.getGhLink())
+			.setPassword(userRequest.getPassword());
 		return userRepository.save(user);
 	}
 	
@@ -75,13 +77,15 @@ public class UserServiceImpl implements UserService {
 	public User updateUserById(Integer userId, UserRequest userRequest) {
 		User user = this.getUserById(userId);
 		user.setUsername(userRequest.getUsername() != null ? userRequest.getUsername() : user.getUsername());
-		user.setPassword(userRequest.getPassword() != null ? userRequest.getPassword() : user.getPassword());
+		user.setAvatar(userRequest.getAvatar() != null ? userRequest.getAvatar() : user.getAvatar());
+		user.setBio(userRequest.getBio() != null ? userRequest.getBio() : user.getBio());
 		user.setForename(userRequest.getForename() != null ? userRequest.getForename() : user.getForename());
 		user.setSurname(userRequest.getSurname() != null ? userRequest.getSurname() : user.getSurname());
 		user.setRegEmail(userRequest.getRegEmail() != null ? userRequest.getRegEmail() : user.getRegEmail());
 		user.setPubEmail(userRequest.getPubEmail() != null ? userRequest.getPubEmail() : user.getPubEmail());
 		user.setFbLink(userRequest.getFbLink() != null ? userRequest.getFbLink() : user.getFbLink());
 		user.setGhLink(userRequest.getGhLink() != null ? userRequest.getGhLink() : user.getGhLink());
+		user.setPassword(userRequest.getPassword() != null ? userRequest.getPassword() : user.getPassword());
 		return userRepository.save(user);
 	}
 	

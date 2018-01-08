@@ -2,6 +2,7 @@ package com.levonke.Community.web;
 
 import com.levonke.Community.domain.Organization;
 import com.levonke.Community.service.OrganizationServiceImpl;
+import com.levonke.Community.service.TeamServiceImpl;
 import com.levonke.Community.web.model.OrganizationRequest;
 import com.levonke.Community.web.model.OrganizationResponse;
 
@@ -23,9 +24,12 @@ public class OrganizationController {
 	
 	private OrganizationServiceImpl organizationService;
 	
+	private TeamServiceImpl teamService;
+	
 	@Autowired
-	OrganizationController(OrganizationServiceImpl organizationService) {
+	OrganizationController(OrganizationServiceImpl organizationService, TeamServiceImpl teamService) {
 		this.organizationService = organizationService;
+		this.teamService = teamService;
 	}
 	
 	@RequestMapping(value = "/organizations", method = RequestMethod.GET)
@@ -105,6 +109,13 @@ public class OrganizationController {
 		size = size != null ? size : 25;
 		return organizationService.getTeamsOfOrganization(organizationId, page, size)
 			.map(TeamResponse::new);
+	}
+	
+	@ResponseStatus(HttpStatus.CREATED)
+	@RequestMapping(value = "/organizations/{organizationId}/teams/{teamId}", method = RequestMethod.POST)
+	public void addTeamToOrganization(@PathVariable("organizationId") final Integer organizationId,
+									  @PathVariable("teamId") final Integer teamId) {
+		teamService.setOrganizationOfTeam(teamId, organizationId);
 	}
 	
 }

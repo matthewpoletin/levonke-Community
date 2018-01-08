@@ -44,9 +44,6 @@ public class User {
 	@Column(name = "users_fblink")
 	private String fbLink;
 	
-	@Column(name = "users_password")
-	private String password;
-	
 	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
 	private Collection<Organization> organizations = new ArrayList<>();
 	

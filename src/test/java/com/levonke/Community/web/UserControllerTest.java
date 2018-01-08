@@ -41,7 +41,6 @@ class UserControllerTest {
 	private final User user = new User()
 		.setId(1)
 		.setUsername("Username")
-		.setPassword("Password")
 		.setForename("Forename")
 		.setSurname("Surname")
 		.setRegEmail("name@server.domain")
@@ -111,7 +110,6 @@ class UserControllerTest {
 		// Arrange
 		User userNoId = new User()
 			.setUsername("Username")
-			.setPassword("Password")
 			.setForename("Forename")
 			.setSurname("Surname")
 			.setRegEmail("name@server.domain")
@@ -123,7 +121,6 @@ class UserControllerTest {
 		
 		UserRequest userRequest = new UserRequest()
 			.setUsername("Username")
-			.setPassword("Password")
 			.setForename("Forename")
 			.setSurname("Surname")
 			.setRegEmail("name@server.domain")
@@ -181,7 +178,6 @@ class UserControllerTest {
 			.setUsername("USERNAME")
 			.setForename("Forename")
 			.setSurname("Surname")
-			.setPassword("Password")
 			.setRegEmail("name@server.domain")
 			.setPubEmail("name@server.domain")
 			.setFbLink("fb.me/username")

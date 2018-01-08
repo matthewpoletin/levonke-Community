@@ -43,7 +43,6 @@ class OrganizationControllerTest {
 	private final User user = new User()
 		.setId(1)
 		.setUsername("Username")
-		.setPassword("Password")
 		.setForename("Forename")
 		.setSurname("Surname")
 		.setRegEmail("name@server.domain")

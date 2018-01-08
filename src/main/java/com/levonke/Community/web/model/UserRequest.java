@@ -29,6 +29,4 @@ public class UserRequest {
 	
 	private String fbLink;
 	
-	private String password;
-	
 }

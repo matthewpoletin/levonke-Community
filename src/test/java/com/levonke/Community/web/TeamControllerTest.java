@@ -45,7 +45,6 @@ class TeamControllerTest {
 	
 	private final User user = new User()
 		.setUsername("Username")
-		.setPassword("Password")
 		.setForename("Forename")
 		.setSurname("Surname")
 		.setRegEmail("name@server.domain")

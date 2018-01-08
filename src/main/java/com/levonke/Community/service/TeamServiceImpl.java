@@ -1,5 +1,6 @@
 package com.levonke.Community.service;
 
+import com.levonke.Community.domain.Organization;
 import com.levonke.Community.domain.Team;
 import com.levonke.Community.repository.TeamRepository;
 import com.levonke.Community.web.model.TeamRequest;
@@ -46,7 +47,7 @@ public class TeamServiceImpl implements TeamService {
 	public Team createTeam(TeamRequest teamRequest) {
 		Team team = new Team()
 			.setName(teamRequest.getName());
-		this.setOrganizationForTeam(team.getId(), teamRequest.getOrganizationId());
+		this.setOrganizationOfTeam(team.getId(), teamRequest.getOrganizationId());
 		return teamRepository.save(team);
 	}
 	
@@ -68,7 +69,7 @@ public class TeamServiceImpl implements TeamService {
 	public Team updateUserById(Integer teamId, TeamRequest teamRequest) {
 		Team team = this.getTeamById(teamId);
 		team.setName(teamRequest.getName() != null ? teamRequest.getName() : team.getName());
-		this.setOrganizationForTeam(teamId, teamRequest.getOrganizationId());
+		this.setOrganizationOfTeam(teamId, teamRequest.getOrganizationId());
 		return teamRepository.save(team);
 	}
 	
@@ -80,12 +81,17 @@ public class TeamServiceImpl implements TeamService {
 	
 	@Override
 	@Transactional
-	public void setOrganizationForTeam(Integer teamId, @NotNull Integer organizationId) {
+	public void setOrganizationOfTeam(Integer teamId, @NotNull Integer organizationId) {
 		if (organizationId != null) {
 			Team team = this.getTeamById(teamId);
 			team.setOrganization(organizationService.getOrganizationById(organizationId));
 			teamRepository.save(team);
 		}
+	}
+	
+	@Override
+	public Organization getOrganizationOfTeam(Integer teamId) {
+		return this.getTeamById(teamId).getOrganization();
 	}
 	
 	@Override

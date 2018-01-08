@@ -48,8 +48,7 @@ public class UserServiceImpl implements UserService {
 			.setRegEmail(userRequest.getRegEmail())
 			.setPubEmail(userRequest.getPubEmail())
 			.setFbLink(userRequest.getFbLink())
-			.setGhLink(userRequest.getGhLink())
-			.setPassword(userRequest.getPassword());
+			.setGhLink(userRequest.getGhLink());
 		return userRepository.save(user);
 	}
 	
@@ -85,7 +84,6 @@ public class UserServiceImpl implements UserService {
 		user.setPubEmail(userRequest.getPubEmail() != null ? userRequest.getPubEmail() : user.getPubEmail());
 		user.setFbLink(userRequest.getFbLink() != null ? userRequest.getFbLink() : user.getFbLink());
 		user.setGhLink(userRequest.getGhLink() != null ? userRequest.getGhLink() : user.getGhLink());
-		user.setPassword(userRequest.getPassword() != null ? userRequest.getPassword() : user.getPassword());
 		return userRepository.save(user);
 	}
 	

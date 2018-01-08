@@ -2,6 +2,7 @@ package com.levonke.Community.web;
 
 import com.levonke.Community.domain.Team;
 import com.levonke.Community.service.TeamServiceImpl;
+import com.levonke.Community.web.model.OrganizationResponse;
 import com.levonke.Community.web.model.TeamRequest;
 import com.levonke.Community.web.model.TeamResponse;
 
@@ -85,11 +86,9 @@ public class TeamController {
 		teamService.deleteTeamById(teamId);
 	}
 	
-	@ResponseStatus(HttpStatus.CREATED)
-	@RequestMapping(value = "/teams/{teamId}/organization/{organizationId}", method = RequestMethod.POST)
-	public void setOrganization(@PathVariable("teamId") final Integer teamId,
-								@PathVariable("organizationId") final Integer organizationId) {
-		teamService.setOrganizationForTeam(teamId, organizationId);
+	@RequestMapping(value = "/teams/{teamId}/organization", method = RequestMethod.GET)
+	public OrganizationResponse getOrganization(@PathVariable("teamId") final Integer teamId) {
+		return new OrganizationResponse(teamService.getOrganizationOfTeam(teamId));
 	}
 	
 	@RequestMapping(value = "/teams/{teamId}/users", method = RequestMethod.GET)

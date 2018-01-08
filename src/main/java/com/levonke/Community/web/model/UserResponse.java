@@ -18,7 +18,6 @@ public class UserResponse {
 	private String pubEmail;
 	private String ghLink;
 	private String fbLink;
-	private String password;
 
 	public UserResponse(User user) {
 		this.id = user.getId();
@@ -31,6 +30,5 @@ public class UserResponse {
 		this.pubEmail = user.getPubEmail();
 		this.ghLink = user.getGhLink();
 		this.fbLink = user.getFbLink();
-		this.password = user.getPassword();
 	}
 }

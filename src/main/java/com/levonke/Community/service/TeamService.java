@@ -1,11 +1,10 @@
-
 package com.levonke.Community.service;
 
+import com.levonke.Community.domain.Organization;
 import com.levonke.Community.domain.Team;
 import com.levonke.Community.web.model.TeamRequest;
 
 import org.springframework.data.domain.Page;
-
 import java.util.List;
 
 public interface TeamService {
@@ -17,9 +16,11 @@ public interface TeamService {
 	Team updateUserById(Integer teamId, TeamRequest teamRequest);
 	void deleteTeamById(Integer teamId);
 	
-	void setOrganizationForTeam(Integer teamId, Integer organizationId);
+	void setOrganizationOfTeam(Integer teamId, Integer organizationId);
 	
 	List<Integer> getUsers(Integer teamId);
 	void addUser(Integer teamId, Integer userId);
 	void removeUser(Integer teamId, Integer userId);
+	
+	Organization getOrganizationOfTeam(Integer teamId);
 }

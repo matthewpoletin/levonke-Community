@@ -1,7 +1,6 @@
 package com.levonke.Community.web;
 
 import com.levonke.Community.domain.User;
-import com.levonke.Community.service.UserService;
 import com.levonke.Community.service.UserServiceImpl;
 import com.levonke.Community.web.model.TeamResponse;
 import com.levonke.Community.web.model.UserRequest;

@@ -23,7 +23,7 @@ RUN wget --no-check-certificate "https://services.gradle.org/distributions/gradl
 CMD ["gralde", "build"]
 
 # move file
-ADD build/libs/levonke-1.0.0-SNAPSHOT.jar levonke-Community.jar
+ADD build/libs/levonke-Community-0.0.1.jar levonke-Community.jar
 
 # listen on port
 EXPOSE 8442
